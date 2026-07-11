@@ -38,53 +38,166 @@ export function extractFromString(s) {
   return null;
 }
 
-// 接受原文(可能含中文地名+链接), 抠出 URL, 必要时跟随重定向展开短链, 提取坐标。
+// Only these public map hosts may be fetched by the Worker.
+const ALLOWED_HOSTS = new Set([
+  "maps.apple.com",
+  "amap.com",
+  "www.amap.com",
+  "uri.amap.com",
+  "ditu.amap.com",
+  "surl.amap.com",
+  "m.amap.com",
+  "maps.google.com",
+  "www.google.com",
+  "goo.gl",
+  "map.baidu.com",
+  "j.map.baidu.com",
+]);
+
+const MAX_REDIRECTS = 4;
+const MAX_RESPONSE_BYTES = 128 * 1024;
+const FETCH_TIMEOUT_MS = 5000;
+
+function validateTargetUrl(value) {
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error("无效链接");
+  }
+
+  const hostname = url.hostname.toLowerCase().replace(/\.$/, "");
+
+  if (url.protocol !== "https:") throw new Error("只允许 HTTPS 链接");
+  if (url.username || url.password) throw new Error("链接不能包含用户名或密码");
+  if (url.port && url.port !== "443") throw new Error("不允许自定义端口");
+  if (!ALLOWED_HOSTS.has(hostname)) throw new Error("不支持该地图域名");
+
+  return url;
+}
+
+async function safeFetch(url) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
+  try {
+    return await fetch(url.toString(), {
+      method: "GET",
+      redirect: "manual",
+      signal: controller.signal,
+      headers: {
+        "user-agent":
+          "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.0 Mobile Safari/604.1",
+        accept: "text/html,application/xhtml+xml,application/json,application/xml;q=0.9,*/*;q=0.8",
+        "accept-language": "zh-CN,zh-Hans;q=0.9",
+      },
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function readLimitedText(response) {
+  const declaredLength = Number(response.headers.get("content-length"));
+  if (Number.isFinite(declaredLength) && declaredLength > MAX_RESPONSE_BYTES) {
+    throw new Error("响应内容过大");
+  }
+  if (!response.body) return "";
+
+  const reader = response.body.getReader();
+  const chunks = [];
+  let total = 0;
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > MAX_RESPONSE_BYTES) {
+        await reader.cancel();
+        throw new Error("响应内容过大");
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+
+  const result = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    result.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return new TextDecoder().decode(result);
+}
+
+// Accepts text or a supported HTTPS map link and extracts coordinates.
 export async function parseCoords(raw) {
   const text = String(raw || "").trim();
   if (!text) throw new Error("空输入");
+  if (text.length > 4096) throw new Error("输入过长");
 
-  const urlMatch = text.match(/https?:\/\/[^\s'"<>]+/i);
-  let target = urlMatch ? urlMatch[0] : text;
+  const directHit = extractFromString(text);
+  const urlMatch = text.match(/https:\/\/[^\s'"<>]+/i);
 
-  let hit = extractFromString(target);
+  // Plain coordinate text does not require an outbound request.
+  if (directHit && !urlMatch) return directHit;
+  if (!urlMatch) throw new Error("未找到有效 HTTPS 地图链接");
+
+  let currentUrl = validateTargetUrl(urlMatch[0]);
+  let hit = extractFromString(currentUrl.toString());
   if (hit) return hit;
 
-  if (urlMatch) {
-    let cur = target;
-    for (let i = 0; i < 5; i++) {
-      let resp;
-      try {
-        resp = await fetch(cur, {
-          redirect: "manual",
-          headers: {
-            "user-agent":
-              "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.0 Mobile/24A5370h Safari/604.1",
-            accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "accept-language": "zh-CN,zh-Hans;q=0.9",
-          },
-        });
-      } catch (e) {
-        break;
+  for (let redirectCount = 0; redirectCount <= MAX_REDIRECTS; redirectCount += 1) {
+    let response;
+    try {
+      response = await safeFetch(currentUrl);
+    } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") {
+        throw new Error("地图请求超时");
       }
-      const loc = resp.headers.get("location");
-      if (loc) {
-        hit = extractFromString(loc);
-        if (hit) return hit;
-        cur = new URL(loc, cur).toString();
-        hit = extractFromString(cur);
-        if (hit) return hit;
-        continue;
-      }
-      hit = extractFromString(resp.url);
-      if (hit) return hit;
-      try {
-        const body = await resp.text();
-        hit = extractFromString(body);
-        if (hit) return hit;
-      } catch (e) {}
-      break;
+      throw new Error("地图链接请求失败");
     }
+
+    const location = response.headers.get("location");
+    if (location) {
+      if (redirectCount === MAX_REDIRECTS) throw new Error("重定向次数过多");
+
+      let nextUrl;
+      try {
+        nextUrl = new URL(location, currentUrl);
+      } catch {
+        throw new Error("无效重定向地址");
+      }
+
+      // Revalidate every redirect target to prevent whitelist bypass.
+      currentUrl = validateTargetUrl(nextUrl.toString());
+      hit = extractFromString(location) || extractFromString(currentUrl.toString());
+      if (hit) return hit;
+      continue;
+    }
+
+    hit = extractFromString(response.url);
+    if (hit) return hit;
+
+    const contentType = (response.headers.get("content-type") || "").toLowerCase();
+    if (
+      contentType &&
+      !contentType.includes("text/") &&
+      !contentType.includes("html") &&
+      !contentType.includes("json") &&
+      !contentType.includes("xml")
+    ) {
+      throw new Error("不支持的响应类型");
+    }
+
+    const body = await readLimitedText(response);
+    hit = extractFromString(body);
+    if (hit) return hit;
+    break;
   }
+
   throw new Error("未能从链接中解析出经纬度");
 }
 

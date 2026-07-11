@@ -1,0 +1,3 @@
+# Copy this file to .dev.vars and replace the value.
+# Never commit .dev.vars.
+WLOC_API_KEY=replace-with-a-random-64-character-hex-key
