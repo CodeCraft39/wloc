@@ -1,2 +1,2184 @@
-/* wloc.js - Build 2026-06-25 10:20:48 */
-const e=(()=>{const e=e=>e in globalThis;switch(!0){case e("$task"):return"Quantumult X";case e("$loon"):return"Loon";case e("$rocket"):return"Shadowrocket";case e("Egern"):return"Egern";case Boolean(globalThis.$environment?.["surge-version"]):return"Surge";case Boolean(globalThis.$environment?.["stash-version"]):return"Stash";case e("Cloudflare"):return"Worker";case Boolean(globalThis.process?.versions?.node):return"Node.js";default:return}})();class t{static#e=new Map([]);static#t=[];static#a=new Map([]);static clear=()=>{};static count=(e="default")=>{switch(t.#e.has(e)){case!0:t.#e.set(e,t.#e.get(e)+1);break;case!1:t.#e.set(e,0)}t.log(`${e}: ${t.#e.get(e)}`)};static countReset=(e="default")=>{switch(t.#e.has(e)){case!0:t.#e.set(e,0),t.log(`${e}: ${t.#e.get(e)}`);break;case!1:t.warn(`Counter "${e}" doesn’t exist`)}};static debug=(...e)=>{t.#r<4||(e=e.map(e=>` ${e}`),t.log(...e))};static error(...a){if(!(t.#r<1)){switch(e){case"Surge":case"Loon":case"Stash":case"Egern":case"Shadowrocket":case"Quantumult X":default:a=a.map(e=>` ${e}`);break;case"Worker":case"Node.js":a=a.map(e=>` ${e?.stack??e}`)}t.log(...a)}}static exception=(...e)=>t.error(...e);static group=e=>t.#t.unshift(e);static groupEnd=()=>t.#t.shift();static info(...e){t.#r<3||(e=e.map(e=>` ${e}`),t.log(...e))}static#r=3;static get logLevel(){switch(t.#r){case 0:return"OFF";case 1:return"ERROR";case 2:return"WARN";case 3:default:return"INFO";case 4:return"DEBUG";case 5:return"ALL"}}static set logLevel(e){switch(typeof e){case"string":e=e.toLowerCase();break;case"number":break;default:e="warn"}switch(e){case 0:case"off":t.#r=0;break;case 1:case"error":t.#r=1;break;case 2:case"warn":case"warning":default:t.#r=2;break;case 3:case"info":t.#r=3;break;case 4:case"debug":t.#r=4;break;case 5:case"all":t.#r=5}}static log=(...e)=>{0!==t.#r&&(e=e.flatMap(e=>{switch(typeof e){case"object":return[JSON.stringify(e)];case"bigint":case"number":case"boolean":return[e.toString()];case"string":return e.split(/\r?\n/u);default:return[e]}}),t.#t.forEach(t=>{(e=e.map(e=>`  ${e}`)).unshift(` ${t}:`)}),e=["",...e],console.log(e.join("\n")))};static time=(e="default")=>t.#a.set(e,Date.now());static timeEnd=(e="default")=>t.#a.delete(e);static timeLog=(e="default")=>{const a=t.#a.get(e);a?t.log(`${e}: ${Date.now()-a}ms`):t.warn(`Timer "${e}" doesn’t exist`)};static warn(...e){t.#r<2||(e=e.map(e=>` ${e}`),t.log(...e))}}class a{static escape(e){const t={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"};return e.replace(/[&<>"']/g,e=>t[e])}static get(e={},t="",r=void 0){Array.isArray(t)||(t=a.toPath(t));const n=t.reduce((e,t)=>Object(e)[t],e);return void 0===n?r:n}static merge(e,...t){if(null==e)return e;for(const r of t)if(null!=r)for(const t of Object.keys(r)){const n=r[t],i=e[t];switch(!0){case a.#n(n)&&a.#n(i):e[t]=a.merge(i,n);break;case n instanceof Map&&i instanceof Map:if(n.size>0)for(const[e,t]of n)i.set(e,t);break;case n instanceof Set&&i instanceof Set:if(n.size>0)for(const e of n)i.add(e);break;case Array.isArray(n)&&0===n.length&&void 0!==i:case n instanceof Map&&0===n.size&&void 0!==i:case n instanceof Set&&0===n.size&&void 0!==i:break;case void 0!==n:e[t]=n}}return e}static#n(e){if(null===e||"object"!=typeof e)return!1;const t=Object.getPrototypeOf(e);return null===t||t===Object.prototype}static omit(e={},t=[]){return Array.isArray(t)||(t=[t.toString()]),t.forEach(t=>a.unset(e,t)),e}static pick(e={},t=[]){Array.isArray(t)||(t=[t.toString()]);const a=Object.entries(e).filter(([e,a])=>t.includes(e));return Object.fromEntries(a)}static set(e,t,r){return Array.isArray(t)||(t=a.toPath(t)),t.slice(0,-1).reduce((e,a,r)=>Object(e[a])===e[a]?e[a]:e[a]=/^\d+$/.test(t[r+1])?[]:{},e)[t[t.length-1]]=r,e}static toPath(e){return e.replace(/\[(\d+)\]/g,".$1").split(".").filter(Boolean)}static unescape(e){const t={"&amp;":"&","&lt;":"<","&gt;":">","&quot;":'"',"&#39;":"'"};return e.replace(/&amp;|&lt;|&gt;|&quot;|&#39;/g,e=>t[e])}static unset(e={},t=""){Array.isArray(t)||(t=a.toPath(t));return t.reduce((e,a,r)=>r===t.length-1?(delete e[a],!0):Object(e)[a],e)}}class r{static parse(e){let t={};switch(typeof e){case"string":{const n=e.replace(/^\?/,"");if(!n)break;const i=Object.fromEntries(n.split("&").filter(Boolean).map(e=>{const[t="",a=""]=e.split("=",2);return[r.#i(t).replace(/\[([^\[\]]+)\]/g,".$1"),r.#i(a).replace(/\"/g,"")]}));Object.keys(i).forEach(e=>a.set(t,e,i[e]));break}case"object":switch(e){case null:break;default:{const r={};Object.keys(e).forEach(t=>a.set(r,t,e[t])),t=r;break}}break;case"undefined":t={}}return t}static stringify(e={}){if(!e||"object"!=typeof e)return"";const t=[];return Object.keys(e).forEach(a=>r.#o(e,a,t)),0===t.length?"":t.map(([e,t])=>`${r.#s(r.#l(e))}=${r.#s(t)}`).join("&")}static#o(e,t,n){const i=a.get(e,t);void 0!==i&&(null!==i?Array.isArray(i)?i.forEach((a,i)=>{void 0!==a&&r.#o(e,`${t}[${i}]`,n)}):r.#n(i)?Object.keys(i).forEach(a=>r.#o(e,`${t}.${a}`,n)):n.push([t,String(i)]):n.push([t,""]))}static#l(e){const[t,...r]=a.toPath(e);return r.reduce((e,t)=>/^\d+$/.test(t)?`${e}[${t}]`:`${e}.${t}`,t)}static#n(e){if(null===e||"object"!=typeof e||Array.isArray(e))return!1;const t=Object.getPrototypeOf(e);return null===t||t===Object.prototype}static#s(e){return encodeURIComponent(e)}static#i(e){return decodeURIComponent(e.replace(/\+/g," "))}}t.debug(" $argument"),globalThis.$argument=r.parse(globalThis.$argument),globalThis.$argument.LogLevel&&(t.logLevel=globalThis.$argument.LogLevel),t.debug(" $argument",`$argument: ${JSON.stringify(globalThis.$argument)}`);const n={100:"Continue",101:"Switching Protocols",102:"Processing",103:"Early Hints",200:"OK",201:"Created",202:"Accepted",203:"Non-Authoritative Information",204:"No Content",205:"Reset Content",206:"Partial Content",207:"Multi-Status",208:"Already Reported",226:"IM Used",300:"Multiple Choices",301:"Moved Permanently",302:"Found",304:"Not Modified",307:"Temporary Redirect",308:"Permanent Redirect",400:"Bad Request",401:"Unauthorized",402:"Payment Required",403:"Forbidden",404:"Not Found",405:"Method Not Allowed",406:"Not Acceptable",407:"Proxy Authentication Required",408:"Request Timeout",409:"Conflict",410:"Gone",411:"Length Required",412:"Precondition Failed",413:"Content Too Large",414:"URI Too Long",415:"Unsupported Media Type",416:"Range Not Satisfiable",417:"Expectation Failed",418:"I'm a teapot",421:"Misdirected Request",422:"Unprocessable Entity",423:"Locked",424:"Failed Dependency",425:"Too Early",426:"Upgrade Required",428:"Precondition Required",429:"Too Many Requests",431:"Request Header Fields Too Large",451:"Unavailable For Legal Reasons",500:"Internal Server Error",501:"Not Implemented",502:"Bad Gateway",503:"Service Unavailable",504:"Gateway Timeout",505:"HTTP Version Not Supported",506:"Variant Also Negotiates",507:"Insufficient Storage",508:"Loop Detected",510:"Not Extended",511:"Network Authentication Required"};function i(r={}){switch(e){case"Surge":r.policy&&a.set(r,"headers.X-Surge-Policy",r.policy),t.log(" 执行结束!",` ${(new Date).getTime()/1e3-$script.startTime} 秒`),$done(r);break;case"Loon":r.policy&&(r.node=r.policy),t.log(" 执行结束!",` ${(new Date-$script.startTime)/1e3} 秒`),$done(r);break;case"Stash":r.policy&&a.set(r,"headers.X-Stash-Selected-Proxy",encodeURI(r.policy)),t.log(" 执行结束!",` ${(new Date-$script.startTime)/1e3} 秒`),$done(r);break;case"Egern":case"Shadowrocket":t.log(" 执行结束!"),$done(r);break;case"Quantumult X":switch(r.policy&&a.set(r,"opts.policy",r.policy),typeof(r=a.pick(r,["status","url","headers","body","bodyBytes"])).status){case"number":r.status=`HTTP/1.1 ${r.status} ${n[r.status]}`;break;case"string":case"undefined":break;default:throw new TypeError(`${Function.name}: 参数类型错误, status 必须为数字或字符串`)}r.body instanceof ArrayBuffer?(r.bodyBytes=r.body,r.body=void 0):ArrayBuffer.isView(r.body)?(r.bodyBytes=r.body.buffer.slice(r.body.byteOffset,r.body.byteLength+r.body.byteOffset),r.body=void 0):r.body&&(r.bodyBytes=void 0),t.log(" 执行结束!"),$done(r);break;case"Worker":default:t.log(" 执行结束!");break;case"Node.js":t.log(" 执行结束!"),process.exit(1)}}class o{static data=null;static dataFile="box.dat";static#c=/^@(?<key>[^.]+)(?:\.(?<path>.*))?$/;static getItem(t,r=null){let n=r;switch(t.startsWith("@")){case!0:{const{key:e,path:r}=t.match(o.#c)?.groups;t=e;let i=o.getItem(t,{});"object"!=typeof i&&(i={}),n=a.get(i,r);try{n=JSON.parse(n)}catch{}break}default:switch(e){case"Surge":case"Loon":case"Stash":case"Egern":case"Shadowrocket":n=$persistentStore.read(t);break;case"Quantumult X":n=$prefs.valueForKey(t);break;case"Worker":o.data=o.data??{},n=o.data[t];break;case"Node.js":o.data=o.#d(o.dataFile),n=o.data?.[t];break;default:n=o.data?.[t]||null}try{n=JSON.parse(n)}catch{}}return n??r}static setItem(t=new String,r=new String){let n=!1;if("object"==typeof r)r=JSON.stringify(r);else r=String(r);switch(t.startsWith("@")){case!0:{const{key:e,path:i}=t.match(o.#c)?.groups;t=e;let s=o.getItem(t,{});"object"!=typeof s&&(s={}),a.set(s,i,r),n=o.setItem(t,s);break}default:switch(e){case"Surge":case"Loon":case"Stash":case"Egern":case"Shadowrocket":n=$persistentStore.write(r,t);break;case"Quantumult X":n=$prefs.setValueForKey(r,t);break;case"Worker":o.data=o.data??{},o.data[t]=r,n=!0;break;case"Node.js":o.data=o.#d(o.dataFile),o.data[t]=r,o.#f(o.dataFile),n=!0;break;default:n=o.data?.[t]||null}}return n}static removeItem(t){let r=!1;switch(t.startsWith("@")){case!0:{const{key:e,path:n}=t.match(o.#c)?.groups;t=e;let i=o.getItem(t);"object"!=typeof i&&(i={}),a.unset(i,n),r=o.setItem(t,i);break}default:switch(e){case"Surge":r=$persistentStore.write(null,t);break;case"Loon":case"Stash":case"Egern":case"Shadowrocket":default:r=!1;break;case"Quantumult X":r=$prefs.removeValueForKey(t);break;case"Worker":o.data=o.data??{},delete o.data[t],r=!0;break;case"Node.js":o.data=o.#d(o.dataFile),delete o.data[t],o.#f(o.dataFile),r=!0}}return r}static clear(){let t=!1;switch(e){case"Surge":case"Loon":case"Stash":case"Egern":case"Shadowrocket":default:t=!1;break;case"Quantumult X":t=$prefs.removeAllValues();break;case"Worker":o.data={},t=!0;break;case"Node.js":o.data=o.#d(o.dataFile),o.data={},o.#f(o.dataFile),t=!0}return t}static#d=t=>{if("Node.js"!==e)return{};{this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const e=this.path.resolve(t),a=this.path.resolve(process.cwd(),t),r=this.fs.existsSync(e),n=!r&&this.fs.existsSync(a);if(!r&&!n)return{};{const t=r?e:a;try{return JSON.parse(this.fs.readFileSync(t))}catch(e){return{}}}}};static#f=(t=this.dataFile)=>{if("Node.js"===e){this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const e=this.path.resolve(t),a=this.path.resolve(process.cwd(),t),r=this.fs.existsSync(e),n=!r&&this.fs.existsSync(a),i=JSON.stringify(this.data);r?this.fs.writeFileSync(e,i):n?this.fs.writeFileSync(a,i):this.fs.writeFileSync(e,i)}}}function s(e){let t=e.length;for(;--t>=0;)e[t]=0}s(new Array(576));s(new Array(60));s(new Array(512));s(new Array(256));s(new Array(29));s(new Array(30));var l=(e,t,a,r)=>{let n=65535&e,i=e>>>16&65535,o=0;for(;0!==a;){o=a>2e3?2e3:a,a-=o;do{n=n+t[r++]|0,i=i+n|0}while(--o);n%=65521,i%=65521}return n|i<<16};const c=new Uint32Array((()=>{let e,t=[];for(var a=0;a<256;a++){e=a;for(var r=0;r<8;r++)e=1&e?3988292384^e>>>1:e>>>1;t[a]=e}return t})());var d=(e,t,a,r)=>{const n=c,i=r+a;e^=-1;for(let a=r;a<i;a++)e=e>>>8^n[255&(e^t[a])];return-1^e},f={2:"need dictionary",1:"stream end",0:"","-1":"file error","-2":"stream error","-3":"data error","-4":"insufficient memory","-5":"buffer error","-6":"incompatible version"},u={Z_NO_FLUSH:0,Z_FINISH:4,Z_BLOCK:5,Z_TREES:6,Z_OK:0,Z_STREAM_END:1,Z_NEED_DICT:2,Z_STREAM_ERROR:-2,Z_DATA_ERROR:-3,Z_MEM_ERROR:-4,Z_BUF_ERROR:-5,Z_DEFLATED:8};const h=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var w=function(e){const t=Array.prototype.slice.call(arguments,1);for(;t.length;){const a=t.shift();if(a){if("object"!=typeof a)throw new TypeError(a+"must be non-object");for(const t in a)h(a,t)&&(e[t]=a[t])}}return e},g=e=>{let t=0;for(let a=0,r=e.length;a<r;a++)t+=e[a].length;const a=new Uint8Array(t);for(let t=0,r=0,n=e.length;t<n;t++){let n=e[t];a.set(n,r),r+=n.length}return a};let p=!0;try{String.fromCharCode.apply(null,new Uint8Array(1))}catch(e){p=!1}const b=new Uint8Array(256);for(let e=0;e<256;e++)b[e]=e>=252?6:e>=248?5:e>=240?4:e>=224?3:e>=192?2:1;b[254]=b[255]=1;var y=e=>{if("function"==typeof TextEncoder&&TextEncoder.prototype.encode)return(new TextEncoder).encode(e);let t,a,r,n,i,o=e.length,s=0;for(n=0;n<o;n++)a=e.charCodeAt(n),55296==(64512&a)&&n+1<o&&(r=e.charCodeAt(n+1),56320==(64512&r)&&(a=65536+(a-55296<<10)+(r-56320),n++)),s+=a<128?1:a<2048?2:a<65536?3:4;for(t=new Uint8Array(s),i=0,n=0;i<s;n++)a=e.charCodeAt(n),55296==(64512&a)&&n+1<o&&(r=e.charCodeAt(n+1),56320==(64512&r)&&(a=65536+(a-55296<<10)+(r-56320),n++)),a<128?t[i++]=a:a<2048?(t[i++]=192|a>>>6,t[i++]=128|63&a):a<65536?(t[i++]=224|a>>>12,t[i++]=128|a>>>6&63,t[i++]=128|63&a):(t[i++]=240|a>>>18,t[i++]=128|a>>>12&63,t[i++]=128|a>>>6&63,t[i++]=128|63&a);return t},m=(e,t)=>{const a=t||e.length;if("function"==typeof TextDecoder&&TextDecoder.prototype.decode)return(new TextDecoder).decode(e.subarray(0,t));let r,n;const i=new Array(2*a);for(n=0,r=0;r<a;){let t=e[r++];if(t<128){i[n++]=t;continue}let o=b[t];if(o>4)i[n++]=65533,r+=o-1;else{for(t&=2===o?31:3===o?15:7;o>1&&r<a;)t=t<<6|63&e[r++],o--;o>1?i[n++]=65533:t<65536?i[n++]=t:(t-=65536,i[n++]=55296|t>>10&1023,i[n++]=56320|1023&t)}}return((e,t)=>{if(t<65534&&e.subarray&&p)return String.fromCharCode.apply(null,e.length===t?e:e.subarray(0,t));let a="";for(let r=0;r<t;r++)a+=String.fromCharCode(e[r]);return a})(i,n)},k=(e,t)=>{(t=t||e.length)>e.length&&(t=e.length);let a=t-1;for(;a>=0&&128==(192&e[a]);)a--;return a<0||0===a?t:a+b[e[a]]>t?a:t};var v=function(){this.input=null,this.next_in=0,this.avail_in=0,this.total_in=0,this.output=null,this.next_out=0,this.avail_out=0,this.total_out=0,this.msg="",this.state=null,this.data_type=2,this.adler=0};const _=16209;var x=function(e,t){let a,r,n,i,o,s,l,c,d,f,u,h,w,g,p,b,y,m,k,v,x,E,A,$;const S=e.state;a=e.next_in,A=e.input,r=a+(e.avail_in-5),n=e.next_out,$=e.output,i=n-(t-e.avail_out),o=n+(e.avail_out-257),s=S.dmax,l=S.wsize,c=S.whave,d=S.wnext,f=S.window,u=S.hold,h=S.bits,w=S.lencode,g=S.distcode,p=(1<<S.lenbits)-1,b=(1<<S.distbits)-1;e:do{h<15&&(u+=A[a++]<<h,h+=8,u+=A[a++]<<h,h+=8),y=w[u&p];t:for(;;){if(m=y>>>24,u>>>=m,h-=m,m=y>>>16&255,0===m)$[n++]=65535&y;else{if(!(16&m)){if(64&m){if(32&m){S.mode=16191;break e}e.msg="invalid literal/length code",S.mode=_;break e}y=w[(65535&y)+(u&(1<<m)-1)];continue t}for(k=65535&y,m&=15,m&&(h<m&&(u+=A[a++]<<h,h+=8),k+=u&(1<<m)-1,u>>>=m,h-=m),h<15&&(u+=A[a++]<<h,h+=8,u+=A[a++]<<h,h+=8),y=g[u&b];;){if(m=y>>>24,u>>>=m,h-=m,m=y>>>16&255,16&m){if(v=65535&y,m&=15,h<m&&(u+=A[a++]<<h,h+=8,h<m&&(u+=A[a++]<<h,h+=8)),v+=u&(1<<m)-1,v>s){e.msg="invalid distance too far back",S.mode=_;break e}if(u>>>=m,h-=m,m=n-i,v>m){if(m=v-m,m>c&&S.sane){e.msg="invalid distance too far back",S.mode=_;break e}if(x=0,E=f,0===d){if(x+=l-m,m<k){k-=m;do{$[n++]=f[x++]}while(--m);x=n-v,E=$}}else if(d<m){if(x+=l+d-m,m-=d,m<k){k-=m;do{$[n++]=f[x++]}while(--m);if(x=0,d<k){m=d,k-=m;do{$[n++]=f[x++]}while(--m);x=n-v,E=$}}}else if(x+=d-m,m<k){k-=m;do{$[n++]=f[x++]}while(--m);x=n-v,E=$}for(;k>2;)$[n++]=E[x++],$[n++]=E[x++],$[n++]=E[x++],k-=3;k&&($[n++]=E[x++],k>1&&($[n++]=E[x++]))}else{x=n-v;do{$[n++]=$[x++],$[n++]=$[x++],$[n++]=$[x++],k-=3}while(k>2);k&&($[n++]=$[x++],k>1&&($[n++]=$[x++]))}break}if(64&m){e.msg="invalid distance code",S.mode=_;break e}y=g[(65535&y)+(u&(1<<m)-1)]}}break}}while(a<r&&n<o);k=h>>3,a-=k,h-=k<<3,u&=(1<<h)-1,e.next_in=a,e.next_out=n,e.avail_in=a<r?r-a+5:5-(a-r),e.avail_out=n<o?o-n+257:257-(n-o),S.hold=u,S.bits=h};const E=15,A=new Uint16Array([3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258,0,0]),$=new Uint8Array([16,16,16,16,16,16,16,16,17,17,17,17,18,18,18,18,19,19,19,19,20,20,20,20,21,21,21,21,16,199,75]),S=new Uint16Array([1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577,0,0]),R=new Uint8Array([16,16,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,24,25,25,26,26,27,27,28,28,29,29,64,64]);var T=(e,t,a,r,n,i,o,s)=>{const l=s.bits;let c,d,f,u,h,w,g=0,p=0,b=0,y=0,m=0,k=0,v=0,_=0,x=0,T=0,O=null;const N=new Uint16Array(16),j=new Uint16Array(16);let L,B,F,C=null;for(g=0;g<=E;g++)N[g]=0;for(p=0;p<r;p++)N[t[a+p]]++;for(m=l,y=E;y>=1&&0===N[y];y--);if(m>y&&(m=y),0===y)return n[i++]=20971520,n[i++]=20971520,s.bits=1,0;for(b=1;b<y&&0===N[b];b++);for(m<b&&(m=b),_=1,g=1;g<=E;g++)if(_<<=1,_-=N[g],_<0)return-1;if(_>0&&(0===e||1!==y))return-1;for(j[1]=0,g=1;g<E;g++)j[g+1]=j[g]+N[g];for(p=0;p<r;p++)0!==t[a+p]&&(o[j[t[a+p]]++]=p);if(0===e?(O=C=o,w=20):1===e?(O=A,C=$,w=257):(O=S,C=R,w=0),T=0,p=0,g=b,h=i,k=m,v=0,f=-1,x=1<<m,u=x-1,1===e&&x>852||2===e&&x>592)return 1;for(;;){L=g-v,o[p]+1<w?(B=0,F=o[p]):o[p]>=w?(B=C[o[p]-w],F=O[o[p]-w]):(B=96,F=0),c=1<<g-v,d=1<<k,b=d;do{d-=c,n[h+(T>>v)+d]=L<<24|B<<16|F}while(0!==d);for(c=1<<g-1;T&c;)c>>=1;if(0!==c?(T&=c-1,T+=c):T=0,p++,0===--N[g]){if(g===y)break;g=t[a+o[p]]}if(g>m&&(T&u)!==f){for(0===v&&(v=m),h+=b,k=g-v,_=1<<k;k+v<y&&(_-=N[k+v],!(_<=0));)k++,_<<=1;if(x+=1<<k,1===e&&x>852||2===e&&x>592)return 1;f=T&u,n[f]=m<<24|k<<16|h-i}}return 0!==T&&(n[h+T]=g-v<<24|64<<16),s.bits=m,0};const{Z_FINISH:O,Z_BLOCK:N,Z_TREES:j,Z_OK:L,Z_STREAM_END:B,Z_NEED_DICT:F,Z_STREAM_ERROR:C,Z_DATA_ERROR:U,Z_MEM_ERROR:I,Z_BUF_ERROR:M,Z_DEFLATED:D}=u,Z=16180,P=16190,z=16191,q=16192,H=16194,W=16199,K=16200,X=16206,Q=16209,V=e=>(e>>>24&255)+(e>>>8&65280)+((65280&e)<<8)+((255&e)<<24);function J(){this.strm=null,this.mode=0,this.last=!1,this.wrap=0,this.havedict=!1,this.flags=0,this.dmax=0,this.check=0,this.total=0,this.head=null,this.wbits=0,this.wsize=0,this.whave=0,this.wnext=0,this.window=null,this.hold=0,this.bits=0,this.length=0,this.offset=0,this.extra=0,this.lencode=null,this.distcode=null,this.lenbits=0,this.distbits=0,this.ncode=0,this.nlen=0,this.ndist=0,this.have=0,this.next=null,this.lens=new Uint16Array(320),this.work=new Uint16Array(288),this.lendyn=null,this.distdyn=null,this.sane=0,this.back=0,this.was=0}const G=e=>{if(!e)return 1;const t=e.state;return!t||t.strm!==e||t.mode<Z||t.mode>16211?1:0},Y=e=>{if(G(e))return C;const t=e.state;return e.total_in=e.total_out=t.total=0,e.msg="",t.wrap&&(e.adler=1&t.wrap),t.mode=Z,t.last=0,t.havedict=0,t.flags=-1,t.dmax=32768,t.head=null,t.hold=0,t.bits=0,t.lencode=t.lendyn=new Int32Array(852),t.distcode=t.distdyn=new Int32Array(592),t.sane=1,t.back=-1,L},ee=e=>{if(G(e))return C;const t=e.state;return t.wsize=0,t.whave=0,t.wnext=0,Y(e)},te=(e,t)=>{let a;if(G(e))return C;const r=e.state;return t<0?(a=0,t=-t):(a=5+(t>>4),t<48&&(t&=15)),t&&(t<8||t>15)?C:(null!==r.window&&r.wbits!==t&&(r.window=null),r.wrap=a,r.wbits=t,ee(e))},ae=(e,t)=>{if(!e)return C;const a=new J;e.state=a,a.strm=e,a.window=null,a.mode=Z;const r=te(e,t);return r!==L&&(e.state=null),r};let re,ne,ie=!0;const oe=e=>{if(ie){re=new Int32Array(512),ne=new Int32Array(32);let t=0;for(;t<144;)e.lens[t++]=8;for(;t<256;)e.lens[t++]=9;for(;t<280;)e.lens[t++]=7;for(;t<288;)e.lens[t++]=8;for(T(1,e.lens,0,288,re,0,e.work,{bits:9}),t=0;t<32;)e.lens[t++]=5;T(2,e.lens,0,32,ne,0,e.work,{bits:5}),ie=!1}e.lencode=re,e.lenbits=9,e.distcode=ne,e.distbits=5},se=(e,t,a,r)=>{let n;const i=e.state;return null===i.window&&(i.window=new Uint8Array(1<<i.wbits)),0===i.wsize&&(i.wsize=1<<i.wbits,i.wnext=0,i.whave=0),r>=i.wsize?(i.window.set(t.subarray(a-i.wsize,a),0),i.wnext=0,i.whave=i.wsize):(n=i.wsize-i.wnext,n>r&&(n=r),i.window.set(t.subarray(a-r,a-r+n),i.wnext),(r-=n)?(i.window.set(t.subarray(a-r,a),0),i.wnext=r,i.whave=i.wsize):(i.wnext+=n,i.wnext===i.wsize&&(i.wnext=0),i.whave<i.wsize&&(i.whave+=n))),0};var le={inflateReset:ee,inflateReset2:te,inflateResetKeep:Y,inflateInit:e=>ae(e,15),inflateInit2:ae,inflate:(e,t)=>{let a,r,n,i,o,s,c,f,u,h,w,g,p,b,y,m,k,v,_,E,A,$,S=0;const R=new Uint8Array(4);let J,Y;const ee=new Uint8Array([16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15]);if(G(e)||!e.output||!e.input&&0!==e.avail_in)return C;a=e.state,a.mode===z&&(a.mode=q),o=e.next_out,n=e.output,c=e.avail_out,i=e.next_in,r=e.input,s=e.avail_in,f=a.hold,u=a.bits,h=s,w=c,$=L;e:for(;;)switch(a.mode){case Z:if(0===a.wrap){a.mode=q;break}for(;u<16;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}if(2&a.wrap&&35615===f){0===a.wbits&&(a.wbits=15),a.check=0,R[0]=255&f,R[1]=f>>>8&255,a.check=d(a.check,R,2,0),f=0,u=0,a.mode=16181;break}if(a.head&&(a.head.done=!1),!(1&a.wrap)||(((255&f)<<8)+(f>>8))%31){e.msg="incorrect header check",a.mode=Q;break}if((15&f)!==D){e.msg="unknown compression method",a.mode=Q;break}if(f>>>=4,u-=4,A=8+(15&f),0===a.wbits&&(a.wbits=A),A>15||A>a.wbits){e.msg="invalid window size",a.mode=Q;break}a.dmax=1<<a.wbits,a.flags=0,e.adler=a.check=1,a.mode=512&f?16189:z,f=0,u=0;break;case 16181:for(;u<16;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}if(a.flags=f,(255&a.flags)!==D){e.msg="unknown compression method",a.mode=Q;break}if(57344&a.flags){e.msg="unknown header flags set",a.mode=Q;break}a.head&&(a.head.text=f>>8&1),512&a.flags&&4&a.wrap&&(R[0]=255&f,R[1]=f>>>8&255,a.check=d(a.check,R,2,0)),f=0,u=0,a.mode=16182;case 16182:for(;u<32;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}a.head&&(a.head.time=f),512&a.flags&&4&a.wrap&&(R[0]=255&f,R[1]=f>>>8&255,R[2]=f>>>16&255,R[3]=f>>>24&255,a.check=d(a.check,R,4,0)),f=0,u=0,a.mode=16183;case 16183:for(;u<16;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}a.head&&(a.head.xflags=255&f,a.head.os=f>>8),512&a.flags&&4&a.wrap&&(R[0]=255&f,R[1]=f>>>8&255,a.check=d(a.check,R,2,0)),f=0,u=0,a.mode=16184;case 16184:if(1024&a.flags){for(;u<16;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}a.length=f,a.head&&(a.head.extra_len=f),512&a.flags&&4&a.wrap&&(R[0]=255&f,R[1]=f>>>8&255,a.check=d(a.check,R,2,0)),f=0,u=0}else a.head&&(a.head.extra=null);a.mode=16185;case 16185:if(1024&a.flags&&(g=a.length,g>s&&(g=s),g&&(a.head&&(A=a.head.extra_len-a.length,a.head.extra||(a.head.extra=new Uint8Array(a.head.extra_len)),a.head.extra.set(r.subarray(i,i+g),A)),512&a.flags&&4&a.wrap&&(a.check=d(a.check,r,g,i)),s-=g,i+=g,a.length-=g),a.length))break e;a.length=0,a.mode=16186;case 16186:if(2048&a.flags){if(0===s)break e;g=0;do{A=r[i+g++],a.head&&A&&a.length<65536&&(a.head.name+=String.fromCharCode(A))}while(A&&g<s);if(512&a.flags&&4&a.wrap&&(a.check=d(a.check,r,g,i)),s-=g,i+=g,A)break e}else a.head&&(a.head.name=null);a.length=0,a.mode=16187;case 16187:if(4096&a.flags){if(0===s)break e;g=0;do{A=r[i+g++],a.head&&A&&a.length<65536&&(a.head.comment+=String.fromCharCode(A))}while(A&&g<s);if(512&a.flags&&4&a.wrap&&(a.check=d(a.check,r,g,i)),s-=g,i+=g,A)break e}else a.head&&(a.head.comment=null);a.mode=16188;case 16188:if(512&a.flags){for(;u<16;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}if(4&a.wrap&&f!==(65535&a.check)){e.msg="header crc mismatch",a.mode=Q;break}f=0,u=0}a.head&&(a.head.hcrc=a.flags>>9&1,a.head.done=!0),e.adler=a.check=0,a.mode=z;break;case 16189:for(;u<32;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}e.adler=a.check=V(f),f=0,u=0,a.mode=P;case P:if(0===a.havedict)return e.next_out=o,e.avail_out=c,e.next_in=i,e.avail_in=s,a.hold=f,a.bits=u,F;e.adler=a.check=1,a.mode=z;case z:if(t===N||t===j)break e;case q:if(a.last){f>>>=7&u,u-=7&u,a.mode=X;break}for(;u<3;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}switch(a.last=1&f,f>>>=1,u-=1,3&f){case 0:a.mode=16193;break;case 1:if(oe(a),a.mode=W,t===j){f>>>=2,u-=2;break e}break;case 2:a.mode=16196;break;case 3:e.msg="invalid block type",a.mode=Q}f>>>=2,u-=2;break;case 16193:for(f>>>=7&u,u-=7&u;u<32;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}if((65535&f)!=(f>>>16^65535)){e.msg="invalid stored block lengths",a.mode=Q;break}if(a.length=65535&f,f=0,u=0,a.mode=H,t===j)break e;case H:a.mode=16195;case 16195:if(g=a.length,g){if(g>s&&(g=s),g>c&&(g=c),0===g)break e;n.set(r.subarray(i,i+g),o),s-=g,i+=g,c-=g,o+=g,a.length-=g;break}a.mode=z;break;case 16196:for(;u<14;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}if(a.nlen=257+(31&f),f>>>=5,u-=5,a.ndist=1+(31&f),f>>>=5,u-=5,a.ncode=4+(15&f),f>>>=4,u-=4,a.nlen>286||a.ndist>30){e.msg="too many length or distance symbols",a.mode=Q;break}a.have=0,a.mode=16197;case 16197:for(;a.have<a.ncode;){for(;u<3;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}a.lens[ee[a.have++]]=7&f,f>>>=3,u-=3}for(;a.have<19;)a.lens[ee[a.have++]]=0;if(a.lencode=a.lendyn,a.lenbits=7,J={bits:a.lenbits},$=T(0,a.lens,0,19,a.lencode,0,a.work,J),a.lenbits=J.bits,$){e.msg="invalid code lengths set",a.mode=Q;break}a.have=0,a.mode=16198;case 16198:for(;a.have<a.nlen+a.ndist;){for(;S=a.lencode[f&(1<<a.lenbits)-1],y=S>>>24,m=S>>>16&255,k=65535&S,!(y<=u);){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}if(k<16)f>>>=y,u-=y,a.lens[a.have++]=k;else{if(16===k){for(Y=y+2;u<Y;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}if(f>>>=y,u-=y,0===a.have){e.msg="invalid bit length repeat",a.mode=Q;break}A=a.lens[a.have-1],g=3+(3&f),f>>>=2,u-=2}else if(17===k){for(Y=y+3;u<Y;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}f>>>=y,u-=y,A=0,g=3+(7&f),f>>>=3,u-=3}else{for(Y=y+7;u<Y;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}f>>>=y,u-=y,A=0,g=11+(127&f),f>>>=7,u-=7}if(a.have+g>a.nlen+a.ndist){e.msg="invalid bit length repeat",a.mode=Q;break}for(;g--;)a.lens[a.have++]=A}}if(a.mode===Q)break;if(0===a.lens[256]){e.msg="invalid code -- missing end-of-block",a.mode=Q;break}if(a.lenbits=9,J={bits:a.lenbits},$=T(1,a.lens,0,a.nlen,a.lencode,0,a.work,J),a.lenbits=J.bits,$){e.msg="invalid literal/lengths set",a.mode=Q;break}if(a.distbits=6,a.distcode=a.distdyn,J={bits:a.distbits},$=T(2,a.lens,a.nlen,a.ndist,a.distcode,0,a.work,J),a.distbits=J.bits,$){e.msg="invalid distances set",a.mode=Q;break}if(a.mode=W,t===j)break e;case W:a.mode=K;case K:if(s>=6&&c>=258){e.next_out=o,e.avail_out=c,e.next_in=i,e.avail_in=s,a.hold=f,a.bits=u,x(e,w),o=e.next_out,n=e.output,c=e.avail_out,i=e.next_in,r=e.input,s=e.avail_in,f=a.hold,u=a.bits,a.mode===z&&(a.back=-1);break}for(a.back=0;S=a.lencode[f&(1<<a.lenbits)-1],y=S>>>24,m=S>>>16&255,k=65535&S,!(y<=u);){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}if(m&&!(240&m)){for(v=y,_=m,E=k;S=a.lencode[E+((f&(1<<v+_)-1)>>v)],y=S>>>24,m=S>>>16&255,k=65535&S,!(v+y<=u);){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}f>>>=v,u-=v,a.back+=v}if(f>>>=y,u-=y,a.back+=y,a.length=k,0===m){a.mode=16205;break}if(32&m){a.back=-1,a.mode=z;break}if(64&m){e.msg="invalid literal/length code",a.mode=Q;break}a.extra=15&m,a.mode=16201;case 16201:if(a.extra){for(Y=a.extra;u<Y;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}a.length+=f&(1<<a.extra)-1,f>>>=a.extra,u-=a.extra,a.back+=a.extra}a.was=a.length,a.mode=16202;case 16202:for(;S=a.distcode[f&(1<<a.distbits)-1],y=S>>>24,m=S>>>16&255,k=65535&S,!(y<=u);){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}if(!(240&m)){for(v=y,_=m,E=k;S=a.distcode[E+((f&(1<<v+_)-1)>>v)],y=S>>>24,m=S>>>16&255,k=65535&S,!(v+y<=u);){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}f>>>=v,u-=v,a.back+=v}if(f>>>=y,u-=y,a.back+=y,64&m){e.msg="invalid distance code",a.mode=Q;break}a.offset=k,a.extra=15&m,a.mode=16203;case 16203:if(a.extra){for(Y=a.extra;u<Y;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}a.offset+=f&(1<<a.extra)-1,f>>>=a.extra,u-=a.extra,a.back+=a.extra}if(a.offset>a.dmax){e.msg="invalid distance too far back",a.mode=Q;break}a.mode=16204;case 16204:if(0===c)break e;if(g=w-c,a.offset>g){if(g=a.offset-g,g>a.whave&&a.sane){e.msg="invalid distance too far back",a.mode=Q;break}g>a.wnext?(g-=a.wnext,p=a.wsize-g):p=a.wnext-g,g>a.length&&(g=a.length),b=a.window}else b=n,p=o-a.offset,g=a.length;g>c&&(g=c),c-=g,a.length-=g;do{n[o++]=b[p++]}while(--g);0===a.length&&(a.mode=K);break;case 16205:if(0===c)break e;n[o++]=a.length,c--,a.mode=K;break;case X:if(a.wrap){for(;u<32;){if(0===s)break e;s--,f|=r[i++]<<u,u+=8}if(w-=c,e.total_out+=w,a.total+=w,4&a.wrap&&w&&(e.adler=a.check=a.flags?d(a.check,n,w,o-w):l(a.check,n,w,o-w)),w=c,4&a.wrap&&(a.flags?f:V(f))!==a.check){e.msg="incorrect data check",a.mode=Q;break}f=0,u=0}a.mode=16207;case 16207:if(a.wrap&&a.flags){for(;u<32;){if(0===s)break e;s--,f+=r[i++]<<u,u+=8}if(4&a.wrap&&f!==(4294967295&a.total)){e.msg="incorrect length check",a.mode=Q;break}f=0,u=0}a.mode=16208;case 16208:$=B;break e;case Q:$=U;break e;case 16210:return I;default:return C}return e.next_out=o,e.avail_out=c,e.next_in=i,e.avail_in=s,a.hold=f,a.bits=u,(a.wsize||w!==e.avail_out&&a.mode<Q&&(a.mode<X||t!==O))&&se(e,e.output,e.next_out,w-e.avail_out),h-=e.avail_in,w-=e.avail_out,e.total_in+=h,e.total_out+=w,a.total+=w,4&a.wrap&&w&&(e.adler=a.check=a.flags?d(a.check,n,w,e.next_out-w):l(a.check,n,w,e.next_out-w)),e.data_type=a.bits+(a.last?64:0)+(a.mode===z?128:0)+(a.mode===W||a.mode===H?256:0),(0===h&&0===w||t===O)&&$===L&&($=M),$},inflateEnd:e=>{if(G(e))return C;let t=e.state;return t.window&&(t.window=null),e.state=null,L},inflateGetHeader:(e,t)=>{if(G(e))return C;const a=e.state;return 2&a.wrap?(a.head=t,t.done=!1,L):C},inflateSetDictionary:(e,t)=>{const a=t.length;let r,n,i;return G(e)?C:(r=e.state,0!==r.wrap&&r.mode!==P?C:r.mode===P&&(n=1,n=l(n,t,a,0),n!==r.check)?U:(i=se(e,t,a,a),i?(r.mode=16210,I):(r.havedict=1,L)))},inflateInfo:"pako inflate (from Nodeca project)"};var ce=function(){this.text=0,this.time=0,this.xflags=0,this.os=0,this.extra=null,this.extra_len=0,this.name="",this.comment="",this.hcrc=0,this.done=!1};const de=Object.prototype.toString,{Z_NO_FLUSH:fe,Z_FINISH:ue,Z_OK:he,Z_STREAM_END:we,Z_NEED_DICT:ge,Z_STREAM_ERROR:pe,Z_DATA_ERROR:be,Z_MEM_ERROR:ye,Z_BUF_ERROR:me}=u,ke={chunkSize:65536,windowBits:15,to:""};function ve(e){this.options=w({},ke,e||{});const t=this.options;t.raw&&t.windowBits>=0&&t.windowBits<16&&(t.windowBits=-t.windowBits,0===t.windowBits&&(t.windowBits=-15)),!(t.windowBits>=0&&t.windowBits<16)||e&&e.windowBits||(t.windowBits+=32),t.windowBits>15&&t.windowBits<48&&(15&t.windowBits||(t.windowBits|=15)),this.err=0,this.msg="",this.ended=!1,this.chunks=[],this.strm=new v,this.strm.avail_out=0;let a=le.inflateInit2(this.strm,t.windowBits);if(a!==he)throw new Error(f[a]);if(this.header=new ce,le.inflateGetHeader(this.strm,this.header),t.dictionary&&("string"==typeof t.dictionary?t.dictionary=y(t.dictionary):"[object ArrayBuffer]"===de.call(t.dictionary)&&(t.dictionary=new Uint8Array(t.dictionary)),t.raw&&(a=le.inflateSetDictionary(this.strm,t.dictionary),a!==he)))throw new Error(f[a])}ve.prototype.push=function(e,t){const a=this.strm,r=this.options.chunkSize,n=this.options.dictionary;let i,o,s;if(this.ended)return!1;for(o=t===~~t?t:!0===t?ue:fe,"[object ArrayBuffer]"===de.call(e)?a.input=new Uint8Array(e):a.input=e,a.next_in=0,a.avail_in=a.input.length;;){for(0===a.avail_out&&(a.output=new Uint8Array(r),a.next_out=0,a.avail_out=r),i=le.inflate(a,o),i===ge&&n&&(i=le.inflateSetDictionary(a,n),i===he?i=le.inflate(a,o):i===be&&(i=ge));a.avail_in>0&&i===we&&2&a.state.wrap&&0!==a.state.flags&&0!==a.input[a.next_in];)le.inflateReset(a),i=le.inflate(a,o);switch(i){case pe:case be:case ge:case ye:return this.onEnd(i),this.ended=!0,!1}if(s=a.avail_out,a.next_out&&(0===a.avail_out||i===we||o>0))if("string"===this.options.to){let e=k(a.output,a.next_out),t=a.next_out-e,n=m(a.output,e);a.next_out=t,a.avail_out=r-t,t&&a.output.set(a.output.subarray(e,e+t),0),this.onData(n)}else this.onData(a.output.length===a.next_out?a.output:a.output.subarray(0,a.next_out)),a.avail_out=0,a.next_out=0;if(i!==he&&i!==me||0!==s){if(i===we)return i=le.inflateEnd(this.strm),this.onEnd(i),this.ended=!0,!0;if(0===a.avail_in){if(o===ue)return i=le.inflateEnd(this.strm),this.onEnd(i===he?me:i),this.ended=!0,!1;break}}}return!0},ve.prototype.onData=function(e){this.chunks.push(e)},ve.prototype.onEnd=function(e){e===he&&("string"===this.options.to?this.result=this.chunks.join(""):this.result=g(this.chunks)),this.chunks=[],this.err=e,this.msg=this.strm.msg};var _e={ungzip:function(e,t){const a=new ve(t);if(a.push(e,!0),a.err)throw a.msg||f[a.err];return a.result}};const{ungzip:xe}=_e;var Ee=xe;function Ae(e,t){let a=0,r=1,n=0;for(;t<e.length;){const i=255&e[t++];if(n<56&&(a+=(127&i)*r),!(128&i))return[a,t];if(r*=128,n+=7,n>=70)throw new Error("varint too long at "+t)}throw new Error("truncated varint")}function $e(e){let t=Math.floor(e);if(t>=0){const e=[];for(;t>=128;)e.push(t%128|128),t=Math.floor(t/128);return e.push(t),e}const a=[0,0,0,0,0,0,0,0];let r=-t;for(let e=0;e<8;e++)a[e]=255&r,r=Math.floor(r/256);let n=1;for(let e=0;e<8;e++){const t=(255&~a[e])+n;a[e]=255&t,n=t>>8}const i=[];for(let e=0;e<10;e++){let t=0;for(let r=0;r<7;r++){const n=7*e+r;n<64&&(t|=(a[n>>3]>>(7&n)&1)<<r)}e<9&&(t|=128),i.push(t)}return i}function Se(e){const t=[];for(let a=0;a<e.length;a++)for(let r=0;r<e[a].length;r++)t.push(255&e[a][r]);return t}function Re(e){const t=[];let a=0;for(;a<e.length;){const r=a,[n,i]=Ae(e,a);a=i;const o=Math.floor(n/8),s=7&n;if(0===o)throw new Error("invalid protobuf field 0 at "+r);let l;if(0===s){const[t,r]=Ae(e,a);l=t,a=r}else if(1===s)l=e.slice(a,a+8),a+=8;else if(2===s){const[t,r]=Ae(e,a);a=r,l=e.slice(a,a+t),a+=t}else{if(5!==s)throw new Error("unsupported wire type "+s);l=e.slice(a,a+4),a+=4}t.push({fieldNo:o,wireType:s,value:l,raw:e.slice(r,a)})}return t}function Te(e,t,a){const r=$e(8*e+t);if(0===t)return Se([r,$e(a)]);if(1===t||5===t)return Se([r,a]);if(2===t)return Se([r,$e(a.length),a]);throw new Error("cannot encode wire type "+t)}function Oe(e,t,a){const r=Re(e);let n=!1,i=!1;for(const e of r)1===e.fieldNo&&0===e.wireType&&(n=!0),2===e.fieldNo&&0===e.wireType&&(i=!0);if(!n||!i)return e;const o=[];for(const e of r)1===e.fieldNo&&0===e.wireType?o.push(Te(1,0,Math.round(1e8*t.latitude))):2===e.fieldNo&&0===e.wireType?o.push(Te(2,0,Math.round(1e8*t.longitude))):3===e.fieldNo&&0===e.wireType?o.push(Te(3,0,t.accuracy)):o.push(e.raw);return a.locations++,Se(o)}function Ne(e,t,a){const r=Re(e);let n=!1;for(const e of r)if(1===e.fieldNo&&2===e.wireType){const t=Array.from(e.value).map(e=>String.fromCharCode(255&e)).join("");n=/^[0-9a-fA-F]{1,2}(:[0-9a-fA-F]{1,2}){5}$/.test(t)}if(!n)return e;let i=!1;const o=[];for(const e of r)if(2===e.fieldNo&&2===e.wireType)try{const r=Oe(e.value,t,a);r.length===e.value.length&&r.join(",")===e.value.join(",")||(i=!0),o.push(Te(e.fieldNo,e.wireType,r))}catch{a.skipped++,o.push(e.raw)}else o.push(e.raw);return i&&a.wifi++,Se(o)}function je(e,t,a){const r=Re(e);let n=!1;const i=[];for(const e of r)if(5===e.fieldNo&&2===e.wireType)try{const r=Oe(e.value,t,a);r.length===e.value.length&&r.join(",")===e.value.join(",")||(n=!0),i.push(Te(e.fieldNo,e.wireType,r))}catch{a.skipped++,i.push(e.raw)}else i.push(e.raw);return n&&a.cell++,Se(i)}function Le(e,t,a){const r=Re(e),n=[];for(const e of r)2===e.wireType&&2===e.fieldNo?n.push(Te(e.fieldNo,e.wireType,Ne(e.value,t,a))):2!==e.wireType||22!==e.fieldNo&&24!==e.fieldNo?n.push(e.raw):n.push(Te(e.fieldNo,e.wireType,je(e.value,t,a)));return Se(n)}function Be(e){return{wifi:e.wifi||0,cell:e.cell||0,locations:e.locations||0,skipped:e.skipped||0}}function Fe(e,t){e.wifi=t.wifi,e.cell=t.cell,e.locations=t.locations,e.skipped=t.skipped}function Ce(e,t){if(e.length!==t.length)return!1;for(let a=0;a<e.length;a++)if(e[a]!==t[a])return!1;return!0}function Ue(e,t,a,r){if(e.length<t+10)throw new Error("body too short: "+e.length+", base="+t);const n=(255&e[t+8])<<8|255&e[t+9];if(n<=0)throw new Error("invalid empty frame length at "+t);if(n+t+10>e.length)throw new Error("invalid frame length "+n+" at "+t+" for "+e.length);const i=e.slice(0,t+8),o=e.slice(t+10,t+10+n),s=e.slice(t+10+n),l=Be(r),c=Le(o,a,r),d=r.locations-l.locations+(r.wifi-l.wifi)+(r.cell-l.cell);if(c.length>65535)throw new Error("patched payload too large: "+c.length);if(d<=0||Ce(o,c))throw Fe(r,l),new Error("frame parsed but no patchable wloc payload at "+t);return Se([i,[c.length>>8&255,255&c.length],c,s])}function Ie(e,a){const r={wifi:0,cell:0,locations:0,skipped:0};if(e.length<10)throw new Error("body too short: "+e.length);const n=[],i=[0,2,4,6,8,10,12,14,16],o=Math.min(96,Math.max(0,e.length-10));for(let e=0;e<=o;e++)i.indexOf(e)<0&&i.push(e);for(let o=0;o<i.length;o++){const s=i[o],l=Be(r);try{const n=Ue(e,s,a,r);return t.info(`[wloc] patched at offset=${s} locations=${r.locations} wifi=${r.wifi} cell=${r.cell} skipped=${r.skipped}`),{data:n,stats:r}}catch(e){Fe(r,l),n.length<6&&n.push("@"+s+":"+(e&&e.message?e.message:String(e)))}}try{const n=function(e,t,a){const r=[],n=Math.min(256,e.length);for(let i=0;i<=n;i++){const n=Be(a);try{const r=e.slice(i),o=Le(r,t,a);if(a.locations-n.locations+(a.wifi-n.wifi)+(a.cell-n.cell)>0&&!Ce(r,o))return Se([e.slice(0,i),o]);Fe(a,n)}catch(e){Fe(a,n),r.length<6&&r.push("raw@"+i+":"+(e&&e.message?e.message:String(e)))}}throw new Error("raw protobuf scan failed; "+r.join(" | "))}(e,a,r);return t.info(`[wloc] patched via raw fallback locations=${r.locations} wifi=${r.wifi} cell=${r.cell} skipped=${r.skipped}`),{data:n,stats:r}}catch(e){n.push("raw:"+(e&&e.message?e.message:String(e)))}throw new Error("no patchable wloc payload found; "+n.join(" | "))}function Me(e){return e.length>=2&&31===e[0]&&139===e[1]}async function De(e,a,r){const n=e.url||"";t.group(`[wloc] Response ${n}`);try{let e=function(e){if(!e)return[];if("undefined"!=typeof ArrayBuffer){if(e instanceof ArrayBuffer)return Array.prototype.slice.call(new Uint8Array(e));if(ArrayBuffer.isView&&ArrayBuffer.isView(e))return Array.prototype.slice.call(new Uint8Array(e.buffer,e.byteOffset,e.byteLength))}if("number"==typeof e.length&&"string"!=typeof e){const t=[];for(let a=0;a<e.length;a++)t.push(255&e[a]);return t}if("string"==typeof e){const t=[];for(let a=0;a<e.length;a++)t.push(255&e.charCodeAt(a));return t}return[]}(a.bodyBytes||a.rawBody||a.body);if(!e.length)return t.warn("[wloc] 无二进制 body，跳过"),a;if(t.debug(`[wloc] input length=${e.length} gzip=${Me(e)}`),null==r.longitude||null==r.latitude)return t.info("[wloc] 透传模式：未设置坐标，不修改响应（恢复真实定位）"),a;let n=e;Me(e)&&(n=Array.from(Ee(new Uint8Array(e))));const{data:i,stats:o}=Ie(n,r),s=new Uint8Array(i);return a.body=s,a.bodyBytes=s,a.rawBody=s,a.headers&&(delete a.headers["Content-Encoding"],delete a.headers["content-encoding"],delete a.headers["Transfer-Encoding"],delete a.headers["transfer-encoding"],a.headers["Content-Length"]=String(s.length)),a.status=200,a.statusCode=200,t.info(`[wloc] 目标坐标: ${r.longitude},${r.latitude} 精度=${r.accuracy} patched=${o.locations}`),a}catch(e){return t.error(`[wloc] ${e.message||e}`),a}finally{t.groupEnd()}}const Ze={longitude:null,latitude:null,accuracy:25,logLevel:"info"};function Pe(){const e=globalThis.$argument||{},a=function(){try{const e=o.getItem("wloc_settings");if(e&&"object"==typeof e)return e}catch(e){t.debug(`[settings] 持久化数据读取失败: ${e.message}`)}return null}(),r={...Ze};if(e.longitude&&(r.longitude=parseFloat(e.longitude)),e.latitude&&(r.latitude=parseFloat(e.latitude)),e.accuracy&&(r.accuracy=parseInt(e.accuracy,10)),e.logLevel&&(r.logLevel=e.logLevel),e.LogLevel&&(r.logLevel=e.LogLevel),a)a.longitude&&(r.longitude=parseFloat(a.longitude)),a.latitude&&(r.latitude=parseFloat(a.latitude)),a.accuracy&&(r.accuracy=parseInt(a.accuracy,10)),t.info(`[settings] 使用已保存坐标: ${r.longitude},${r.latitude}`);else if(113.94114===r.longitude&&22.544577===r.latitude)return r.longitude=null,r.latitude=null,t.info("[settings] 透传模式：持久化数据为空且为默认参数，不修改定位"),r;return null==r.longitude||null==r.latitude?t.info("[settings] 透传模式：未设置坐标，将不修改定位响应"):t.debug(`[settings] lon=${r.longitude} lat=${r.latitude} acc=${r.accuracy}`),r}let ze;(async()=>{const e=function(){try{return"undefined"!=typeof $response?$response:void 0}catch{return}}();if(!e)return void t.warn("[wloc] 非响应模式，跳过");const a=Pe();t.logLevel=a.logLevel,ze=await De($request,e,a)})().catch(e=>t.error(e)).finally(()=>{switch(typeof ze){case"object":ze.headers?.["Content-Encoding"]&&(ze.headers["Content-Encoding"]="identity"),ze.headers?.["content-encoding"]&&(ze.headers["content-encoding"]="identity"),"Quantumult X"===e?(ze.status||(ze.status=200),delete ze.headers?.["Content-Length"],delete ze.headers?.["content-length"],delete ze.headers?.["Transfer-Encoding"],i(ze)):i({response:ze});break;case"undefined":i({});break;default:t.error("[wloc] 不合法的 response 类型: "+typeof ze),i({})}});
+/*
+ * 拦截 Apple /clls/wloc 接口的回应，解 ARPC 封包，改 WiFi 热点和基站坐标，
+ * 再按 Apple 的格式封回去返回给系统。
+ *
+ * 主要流程：
+ *   ARPC 拆包 → protobuf 解字段 → 替换 Location 子消息的坐标/精度/运动状态
+ *   → protobuf 重新打包 → 按原格式（ARPC / marker / synthetic）封回
+ */
+(function () {
+  "use strict";
+
+  var DEFAULT_CONFIG = {
+    // Stateless default: OFF until a coordinate is written to the device's own
+    // $persistentStore (by the picker's save-interceptor) or enabled=true is passed
+    // as a module argument. This makes "nothing picked yet" fall through to the real
+    // location instead of the built-in Apple Park default. Stateful module manifests
+    // pass enabled=true explicitly to keep their always-on behavior.
+    enabled: false,
+    mode: "response",
+    latitude: 37.3349,
+    longitude: -122.00902,
+    horizontalAccuracy: 39,
+    verticalAccuracy: 1000,
+    altitude: 530,
+    unknownValue4: 3,
+    motionActivityType: 63,
+    motionActivityConfidence: 467,
+    failOpen: true,
+    debug: false,
+    dumpRaw: false,
+    dumpHeaders: false,
+    prepareHeaders: false,
+    rawLimit: 0
+  };
+
+  // Prefix prepended to a SPOOFED (synthesized) response. Mirrors the original Go
+  // `initialBytes = 0001000000010000` from main.go:253.
+  var APPLE_WLOC_PREFIX = bytesFromArray([0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00]);
+
+  // Stable marker that precedes the AppleWLoc protobuf inside a REAL Apple /clls/wloc
+  // response. After the marker come 2 bytes (uint16 BE payload length) then the payload.
+  var APPLE_WLOC_MARKER = bytesFromArray([0x00, 0x00, 0x00, 0x01, 0x00, 0x00]);
+  var ROOT_DROP_FIELDS = { 3: true, 4: true, 33: true };
+  var CELL_RESPONSE_FIELDS = { 22: true, 24: true };
+  // Location messages are patched minimally: only coordinate fields 1 and 2.
+
+  function bytesFromArray(values) {
+    return new Uint8Array(values);
+  }
+
+  function concatBytes(parts) {
+    var total = 0;
+    var i;
+    for (i = 0; i < parts.length; i += 1) {
+      total += parts[i].length;
+    }
+
+    var out = new Uint8Array(total);
+    var offset = 0;
+    for (i = 0; i < parts.length; i += 1) {
+      out.set(parts[i], offset);
+      offset += parts[i].length;
+    }
+    return out;
+  }
+
+  function bytesEqualPrefix(bytes, prefix) {
+    if (!bytes || bytes.length < prefix.length) {
+      return false;
+    }
+    for (var i = 0; i < prefix.length; i += 1) {
+      if (bytes[i] !== prefix[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // Search for a byte sequence within bytes; returns first index or -1.
+  // Searches forward to prefer the earliest (most likely correct) match.
+  function findBytes(bytes, marker) {
+    if (!bytes || !marker || marker.length === 0) {
+      return -1;
+    }
+    for (var i = 0; i <= bytes.length - marker.length; i += 1) {
+      var ok = true;
+      for (var j = 0; j < marker.length; j += 1) {
+        if (bytes[i + j] !== marker[j]) {
+          ok = false;
+          break;
+        }
+      }
+      if (ok) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  // Try to parse bytes as protobuf fields. Returns fields array or null on failure.
+  function tryParseFields(bytes) {
+    try {
+      if (!bytes || bytes.length === 0) {
+        return null;
+      }
+      var fields = parseFields(bytes);
+      return fields.length > 0 ? fields : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function binaryStringToBytes(value) {
+    var out = new Uint8Array(value.length);
+    for (var i = 0; i < value.length; i += 1) {
+      out[i] = value.charCodeAt(i) & 0xff;
+    }
+    return out;
+  }
+
+  function bytesToBinaryString(bytes) {
+    var chunkSize = 0x8000;
+    var chunks = [];
+    for (var i = 0; i < bytes.length; i += chunkSize) {
+      var chunk = bytes.subarray(i, i + chunkSize);
+      chunks.push(String.fromCharCode.apply(null, Array.prototype.slice.call(chunk)));
+    }
+    return chunks.join("");
+  }
+
+  function bytesToBase64(bytes) {
+    var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    var out = "";
+    for (var i = 0; i < bytes.length; i += 3) {
+      var b0 = bytes[i];
+      var b1 = i + 1 < bytes.length ? bytes[i + 1] : 0;
+      var b2 = i + 2 < bytes.length ? bytes[i + 2] : 0;
+      var triplet = (b0 << 16) | (b1 << 8) | b2;
+      out += alphabet[(triplet >> 18) & 0x3f];
+      out += alphabet[(triplet >> 12) & 0x3f];
+      out += i + 1 < bytes.length ? alphabet[(triplet >> 6) & 0x3f] : "=";
+      out += i + 2 < bytes.length ? alphabet[triplet & 0x3f] : "=";
+    }
+    return out;
+  }
+
+  function hexPreview(bytes, limit) {
+    if (!bytes) {
+      return "<none>";
+    }
+    var out = [];
+    var max = Math.min(bytes.length, limit || 16);
+    for (var i = 0; i < max; i += 1) {
+      out.push(("0" + bytes[i].toString(16)).slice(-2));
+    }
+    return out.join("");
+  }
+
+  function bodyToBytes(body) {
+    if (body == null) {
+      return null;
+    }
+    if (body instanceof Uint8Array) {
+      return body;
+    }
+    if (typeof ArrayBuffer !== "undefined" && body instanceof ArrayBuffer) {
+      return new Uint8Array(body);
+    }
+    if (typeof body === "string") {
+      return binaryStringToBytes(body);
+    }
+    if (typeof body === "object" && typeof body.length === "number") {
+      return new Uint8Array(body);
+    }
+    if (typeof body === "object" && body.bytes && typeof body.bytes.length === "number") {
+      return new Uint8Array(body.bytes);
+    }
+    if (typeof body === "object" && body.data && typeof body.data.length === "number") {
+      return new Uint8Array(body.data);
+    }
+    return null;
+  }
+
+  function messageBodyToBytes(message) {
+    if (!message) {
+      return null;
+    }
+    return (
+      bodyToBytes(message.bodyBytes) ||
+      bodyToBytes(message.body) ||
+      bodyToBytes(message.rawBody) ||
+      bodyToBytes(message.binaryBody)
+    );
+  }
+
+  function readUInt16BE(bytes, offset) {
+    if (offset + 2 > bytes.length) {
+      throw new Error("uint16 out of range");
+    }
+    return (bytes[offset] << 8) | bytes[offset + 1];
+  }
+
+  function readUInt32BE(bytes, offset) {
+    if (offset + 4 > bytes.length) {
+      throw new Error("uint32 out of range");
+    }
+    return (
+      (bytes[offset] * 0x1000000) +
+      ((bytes[offset + 1] << 16) | (bytes[offset + 2] << 8) | bytes[offset + 3])
+    ) >>> 0;
+  }
+
+  function writeUInt16BE(value) {
+    if (value < 0 || value > 0xffff) {
+      throw new Error("uint16 value out of range: " + value);
+    }
+    return bytesFromArray([(value >> 8) & 0xff, value & 0xff]);
+  }
+
+  function writeUInt32BE(value) {
+    return bytesFromArray([
+      (value >>> 24) & 0xff,
+      (value >>> 16) & 0xff,
+      (value >>> 8) & 0xff,
+      value & 0xff
+    ]);
+  }
+
+  function asciiBytes(value) {
+    var out = new Uint8Array(value.length);
+    for (var i = 0; i < value.length; i += 1) {
+      out[i] = value.charCodeAt(i) & 0x7f;
+    }
+    return out;
+  }
+
+  function encodeVarintUnsigned(value) {
+    var v = typeof value === "bigint" ? value : BigInt(value);
+    if (v < 0n) {
+      throw new Error("negative unsigned varint");
+    }
+
+    var out = [];
+    while (v >= 0x80n) {
+      out.push(Number((v & 0x7fn) | 0x80n));
+      v >>= 7n;
+    }
+    out.push(Number(v));
+    return bytesFromArray(out);
+  }
+
+  function encodeVarintSignedInt64(value) {
+    var v = typeof value === "bigint" ? value : BigInt(Math.trunc(value));
+    if (v < 0n) {
+      v = BigInt.asUintN(64, v);
+    }
+    return encodeVarintUnsigned(v);
+  }
+
+  function decodeVarint(bytes, offset) {
+    var result = 0n;
+    var shift = 0n;
+    var current = offset;
+
+    while (current < bytes.length) {
+      var b = bytes[current];
+      current += 1;
+      result |= BigInt(b & 0x7f) << shift;
+      if ((b & 0x80) === 0) {
+        return { value: result, offset: current };
+      }
+      shift += 7n;
+      if (shift > 70n) {
+        throw new Error("varint too long");
+      }
+    }
+
+    throw new Error("unterminated varint");
+  }
+
+  function makeKey(fieldNumber, wireType) {
+    return encodeVarintUnsigned((BigInt(fieldNumber) << 3n) | BigInt(wireType));
+  }
+
+  function makeVarintField(fieldNumber, value) {
+    return concatBytes([makeKey(fieldNumber, 0), encodeVarintSignedInt64(value)]);
+  }
+
+  function makeLengthDelimitedField(fieldNumber, payload) {
+    return concatBytes([makeKey(fieldNumber, 2), encodeVarintUnsigned(payload.length), payload]);
+  }
+
+  function parseFields(bytes) {
+    var fields = [];
+    var offset = 0;
+
+    while (offset < bytes.length) {
+      var keyStart = offset;
+      var key = decodeVarint(bytes, offset);
+      offset = key.offset;
+
+      var fieldNumber = Number(key.value >> 3n);
+      var wireType = Number(key.value & 0x7n);
+      if (fieldNumber === 0) {
+        throw new Error("protobuf field number 0");
+      }
+
+      var valueStart = offset;
+      var valueEnd;
+      if (wireType === 0) {
+        valueEnd = decodeVarint(bytes, offset).offset;
+      } else if (wireType === 1) {
+        valueEnd = offset + 8;
+      } else if (wireType === 2) {
+        var lengthInfo = decodeVarint(bytes, offset);
+        var length = Number(lengthInfo.value);
+        valueStart = lengthInfo.offset;
+        valueEnd = valueStart + length;
+      } else if (wireType === 5) {
+        valueEnd = offset + 4;
+      } else {
+        throw new Error("unsupported protobuf wire type: " + wireType);
+      }
+
+      if (valueEnd > bytes.length) {
+        throw new Error("protobuf field exceeds buffer");
+      }
+
+      fields.push({
+        fieldNumber: fieldNumber,
+        wireType: wireType,
+        keyStart: keyStart,
+        valueStart: valueStart,
+        valueEnd: valueEnd,
+        end: valueEnd,
+        raw: bytes.slice(keyStart, valueEnd),
+        valueBytes: bytes.slice(valueStart, valueEnd)
+      });
+      offset = valueEnd;
+    }
+
+    return fields;
+  }
+
+  function firstFieldByNumber(fields, fieldNumber) {
+    for (var i = 0; i < fields.length; i += 1) {
+      if (fields[i].fieldNumber === fieldNumber) {
+        return fields[i];
+      }
+    }
+    return null;
+  }
+
+  function signedVarintFieldValue(field) {
+    if (!field || field.wireType !== 0) {
+      return null;
+    }
+    return BigInt.asIntN(64, decodeVarint(field.valueBytes, 0).value);
+  }
+
+  function locationSummary(locationPayload) {
+    try {
+      var fields = parseFields(locationPayload);
+      var lat = signedVarintFieldValue(firstFieldByNumber(fields, 1));
+      var lon = signedVarintFieldValue(firstFieldByNumber(fields, 2));
+      if (lat == null || lon == null) {
+        return "<missing>";
+      }
+      return (Number(lat) / 100000000).toFixed(8) + "," + (Number(lon) / 100000000).toFixed(8);
+    } catch (err) {
+      return "<parse-failed:" + err.message + ">";
+    }
+  }
+
+  function patchedPayloadSummary(payload) {
+    try {
+      var rootFields = parseFields(payload);
+      var parts = [];
+      var wifi = firstFieldByNumber(rootFields, 2);
+      if (wifi && wifi.wireType === 2) {
+        var wifiLocation = firstFieldByNumber(parseFields(wifi.valueBytes), 2);
+        parts.push("firstWifi=" + (wifiLocation ? locationSummary(wifiLocation.valueBytes) : "<missing>"));
+      }
+      var cell = firstCellResponseField(rootFields);
+      if (cell && cell.wireType === 2) {
+        var cellLocation = firstFieldByNumber(parseFields(cell.valueBytes), 5);
+        parts.push("firstCell=" + (cellLocation ? locationSummary(cellLocation.valueBytes) : "<missing>"));
+      }
+      return parts.length ? parts.join(", ") : "no wifi/cell location fields";
+    } catch (err) {
+      return "summary failed: " + err.message;
+    }
+  }
+
+  function isCellResponseField(fieldNumber) {
+    return CELL_RESPONSE_FIELDS[fieldNumber] === true;
+  }
+
+  function firstCellResponseField(fields) {
+    for (var i = 0; i < fields.length; i += 1) {
+      if (isCellResponseField(fields[i].fieldNumber)) {
+        return fields[i];
+      }
+    }
+    return null;
+  }
+
+  function coordToInt(value) {
+    // 使用 Math.trunc 精确匹配 Go: int64(coord * 1e8)
+    return Math.trunc(Number(value) * 100000000);
+  }
+
+  function parseBoolean(value, defaultValue) {
+    if (value === true || value === false) {
+      return value;
+    }
+    if (typeof value === "string") {
+      var normalized = value.trim().toLowerCase();
+      if (normalized === "true" || normalized === "1" || normalized === "yes" || normalized === "on") {
+        return true;
+      }
+      if (normalized === "false" || normalized === "0" || normalized === "no" || normalized === "off") {
+        return false;
+      }
+    }
+    return defaultValue;
+  }
+
+  function normalizeConfig(input) {
+    var cfg = {};
+    var key;
+    for (key in DEFAULT_CONFIG) {
+      if (Object.prototype.hasOwnProperty.call(DEFAULT_CONFIG, key)) {
+        cfg[key] = DEFAULT_CONFIG[key];
+      }
+    }
+    input = input || {};
+    for (key in input) {
+      if (Object.prototype.hasOwnProperty.call(input, key)) {
+        cfg[key] = input[key];
+      }
+    }
+
+    cfg.enabled = parseBoolean(cfg.enabled, true);
+    cfg.failOpen = parseBoolean(cfg.failOpen, true);
+    var mode = String(cfg.mode || "response").toLowerCase();
+    cfg.mode = mode === "request" || mode === "prepare" || mode === "probe" || mode === "inspect" ? mode : "response";
+    cfg.latitude = Number(cfg.latitude);
+    cfg.longitude = Number(cfg.longitude);
+    cfg.horizontalAccuracy = Math.trunc(Number(cfg.horizontalAccuracy));
+    cfg.verticalAccuracy = Math.trunc(Number(cfg.verticalAccuracy));
+    cfg.altitude = Math.trunc(Number(cfg.altitude));
+    cfg.unknownValue4 = Math.trunc(Number(cfg.unknownValue4));
+    cfg.motionActivityType = Math.trunc(Number(cfg.motionActivityType));
+    cfg.motionActivityConfidence = Math.trunc(Number(cfg.motionActivityConfidence));
+    cfg.dumpRaw = cfg.dumpRaw === true || String(cfg.dumpRaw).toLowerCase() === "true";
+    cfg.dumpHeaders = cfg.dumpHeaders === true || String(cfg.dumpHeaders).toLowerCase() === "true";
+    cfg.prepareHeaders = cfg.prepareHeaders === true || String(cfg.prepareHeaders).toLowerCase() === "true";
+    cfg.rawLimit = Math.trunc(Number(cfg.rawLimit || 0));
+    if (!Number.isFinite(cfg.rawLimit) || cfg.rawLimit < 0) {
+      cfg.rawLimit = 0;
+    }
+
+    if (!Number.isFinite(cfg.latitude) || cfg.latitude < -90 || cfg.latitude > 90) {
+      throw new Error("invalid latitude");
+    }
+    if (!Number.isFinite(cfg.longitude) || cfg.longitude < -180 || cfg.longitude > 180) {
+      throw new Error("invalid longitude");
+    }
+    return cfg;
+  }
+
+  function patchLocation(locationPayload, config) {
+    var fields = locationPayload.length ? parseFields(locationPayload) : [];
+    var parts = [];
+    var latitudePatched = false;
+    var longitudePatched = false;
+
+    // Replace coordinates at their original positions and preserve every other
+    // field byte-for-byte. This avoids rebuilding Apple's Location message with
+    // synthetic accuracy, altitude and motion values that the client may reject.
+    for (var i = 0; i < fields.length; i += 1) {
+      var field = fields[i];
+      if (field.fieldNumber === 1 && field.wireType === 0) {
+        parts.push(makeVarintField(1, coordToInt(config.latitude)));
+        latitudePatched = true;
+      } else if (field.fieldNumber === 2 && field.wireType === 0) {
+        parts.push(makeVarintField(2, coordToInt(config.longitude)));
+        longitudePatched = true;
+      } else {
+        parts.push(field.raw);
+      }
+    }
+
+    // A normal Apple Location message already contains both fields. These
+    // fallbacks keep malformed or incomplete records usable without changing
+    // the normal wire layout.
+    if (!latitudePatched) {
+      parts.push(makeVarintField(1, coordToInt(config.latitude)));
+    }
+    if (!longitudePatched) {
+      parts.push(makeVarintField(2, coordToInt(config.longitude)));
+    }
+
+    return concatBytes(parts);
+  }
+
+  function patchWifiDevice(wifiPayload, config) {
+    var fields = parseFields(wifiPayload);
+    var parts = [];
+    var patchedLocation = false;
+
+    for (var i = 0; i < fields.length; i += 1) {
+      var field = fields[i];
+      if (field.fieldNumber === 2 && field.wireType === 2) {
+        parts.push(makeLengthDelimitedField(2, patchLocation(field.valueBytes, config)));
+        patchedLocation = true;
+      } else {
+        parts.push(field.raw);
+      }
+    }
+
+    if (!patchedLocation) {
+      parts.push(makeLengthDelimitedField(2, patchLocation(bytesFromArray([]), config)));
+    }
+
+    return concatBytes(parts);
+  }
+
+  function patchCellTower(cellPayload, config) {
+    var fields = parseFields(cellPayload);
+    var parts = [];
+    var patchedLocation = false;
+
+    for (var i = 0; i < fields.length; i += 1) {
+      var field = fields[i];
+      if (field.fieldNumber === 5 && field.wireType === 2) {
+        parts.push(makeLengthDelimitedField(5, patchLocation(field.valueBytes, config)));
+        patchedLocation = true;
+      } else {
+        parts.push(field.raw);
+      }
+    }
+
+    if (!patchedLocation) {
+      parts.push(makeLengthDelimitedField(5, patchLocation(bytesFromArray([]), config)));
+    }
+
+    return concatBytes(parts);
+  }
+
+  function patchAppleWLocPayload(payload, config) {
+    var fields = parseFields(payload);
+    var parts = [];
+    var wifiCount = 0;
+    var cellCount = 0;
+
+    for (var i = 0; i < fields.length; i += 1) {
+      var field = fields[i];
+      if (field.fieldNumber === 2 && field.wireType === 2) {
+        parts.push(makeLengthDelimitedField(2, patchWifiDevice(field.valueBytes, config)));
+        wifiCount += 1;
+      } else if (isCellResponseField(field.fieldNumber) && field.wireType === 2) {
+        parts.push(makeLengthDelimitedField(field.fieldNumber, patchCellTower(field.valueBytes, config)));
+        cellCount += 1;
+      } else if (!ROOT_DROP_FIELDS[field.fieldNumber]) {
+        parts.push(field.raw);
+      }
+    }
+
+    return { payload: concatBytes(parts), wifiCount: wifiCount, cellCount: cellCount };
+  }
+
+  function readPascalString(bytes, state) {
+    var length = readUInt16BE(bytes, state.offset);
+    state.offset += 2;
+    if (state.offset + length > bytes.length) {
+      throw new Error("ARPC pascal string exceeds buffer");
+    }
+
+    var chars = [];
+    for (var i = 0; i < length; i += 1) {
+      chars.push(String.fromCharCode(bytes[state.offset + i]));
+    }
+    state.offset += length;
+    return chars.join("");
+  }
+
+  function writePascalString(value) {
+    var bytes = asciiBytes(value);
+    return concatBytes([writeUInt16BE(bytes.length), bytes]);
+  }
+
+  function parseArpc(bytes) {
+    var state = { offset: 0 };
+    var version = readUInt16BE(bytes, state.offset);
+    state.offset += 2;
+    var locale = readPascalString(bytes, state);
+    var appIdentifier = readPascalString(bytes, state);
+    var osVersion = readPascalString(bytes, state);
+    var functionId = readUInt32BE(bytes, state.offset);
+    state.offset += 4;
+    var payloadLength = readUInt32BE(bytes, state.offset);
+    state.offset += 4;
+
+    if (state.offset + payloadLength > bytes.length) {
+      throw new Error("ARPC payload exceeds buffer");
+    }
+
+    return {
+      version: version,
+      locale: locale,
+      appIdentifier: appIdentifier,
+      osVersion: osVersion,
+      functionId: functionId,
+      payload: bytes.slice(state.offset, state.offset + payloadLength)
+    };
+  }
+
+  function serializeArpc(arpc) {
+    return concatBytes([
+      writeUInt16BE(arpc.version),
+      writePascalString(arpc.locale),
+      writePascalString(arpc.appIdentifier),
+      writePascalString(arpc.osVersion),
+      writeUInt32BE(arpc.functionId),
+      writeUInt32BE(arpc.payload.length),
+      arpc.payload
+    ]);
+  }
+
+  function buildAppleWLocResponse(payload, prefix) {
+    return concatBytes([prefix || APPLE_WLOC_PREFIX, writeUInt16BE(payload.length), payload]);
+  }
+
+  function extractPrefixedAppleWLocPayload(responseBytes) {
+    if (!responseBytes || responseBytes.length < 10) {
+      return null;
+    }
+    if (responseBytes[0] !== 0x00 || responseBytes[1] !== 0x01) {
+      return null;
+    }
+    if (responseBytes[6] !== 0x00 || responseBytes[7] !== 0x00) {
+      return null;
+    }
+
+    var payloadLength = readUInt16BE(responseBytes, 8);
+    var payloadOffset = 10;
+    if (payloadLength <= 0 || payloadOffset + payloadLength > responseBytes.length) {
+      return null;
+    }
+
+    var payload = responseBytes.slice(payloadOffset, payloadOffset + payloadLength);
+    if (tryParseFields(payload) === null) {
+      return null;
+    }
+
+    return {
+      kind: "synthetic",
+      payload: payload,
+      prefix: responseBytes.slice(0, 8),
+      suffix: responseBytes.slice(payloadOffset + payloadLength)
+    };
+  }
+
+  // Extract the AppleWLoc protobuf payload from a /clls/wloc response body.
+  // Returns a typed result: { kind, payload, ... } so the caller can write back
+  // in the correct format.
+  //
+  // Supported shapes:
+  //   "arpc"      – Full ARPC envelope (same format as requests). The real Apple
+  //                 response uses this. Contains arpc metadata for write-back.
+  //   "synthetic" – Our own spoofed response: APPLE_WLOC_PREFIX (8 bytes) + uint16 len.
+  //   "marker"    – Fallback: marker search 00 00 00 01 00 00 + uint16 len.
+  //                 Keeps the prefix/suffix bytes for write-back.
+  //   "bare"      – Bare protobuf payload (field tag 0x12 = wifi device, wire type 2).
+  function extractAppleWLocPayload(responseBytes) {
+    if (!responseBytes || responseBytes.length < 2) {
+      throw new Error("Apple WLoc response too short");
+    }
+
+    // Shape 1: prefixed WLoc response. The original Go implementation emits
+    // 0001000000010000, while Apple's live responses may use 0001000000030000.
+    var prefixed = extractPrefixedAppleWLocPayload(responseBytes);
+    if (prefixed) {
+      return prefixed;
+    }
+
+    // Shape 2: ARPC envelope – try the proper structured parser first.
+    // The Apple /clls/wloc response uses the same ARPC framing as the request.
+    try {
+      var arpc = parseArpc(responseBytes);
+      if (arpc.payload.length > 0 && tryParseFields(arpc.payload) !== null) {
+        return {
+          kind: "arpc",
+          payload: arpc.payload,
+          arpc: arpc
+        };
+      }
+    } catch (e) {
+      // ARPC parse failed – continue with fallback strategies.
+    }
+
+    // Shape 3: marker search fallback. The ARPC functionId (00 00 00 01) may be
+    // followed by uint16/uint32 payload length. Try to find and validate.
+    var markerIdx = findBytes(responseBytes, APPLE_WLOC_MARKER);
+    if (markerIdx >= 0) {
+      var lenOffset = markerIdx + APPLE_WLOC_MARKER.length;
+      if (lenOffset + 2 <= responseBytes.length) {
+        var realLen = readUInt16BE(responseBytes, lenOffset);
+        var realPayloadOffset = lenOffset + 2;
+        if (realLen > 0 && realPayloadOffset + realLen <= responseBytes.length) {
+          var candidatePayload = responseBytes.slice(realPayloadOffset, realPayloadOffset + realLen);
+          // Only accept if the candidate parses as valid protobuf.
+          if (tryParseFields(candidatePayload) !== null) {
+            return {
+              kind: "marker",
+              payload: candidatePayload,
+              prefix: responseBytes.slice(0, markerIdx),
+              markerAndLen: responseBytes.slice(markerIdx, realPayloadOffset),
+              suffix: responseBytes.slice(realPayloadOffset + realLen)
+            };
+          }
+        }
+      }
+    }
+
+    // Shape 4: bare protobuf payload (best effort).
+    if (looksLikeAppleWLocPayload(responseBytes)) {
+      return {
+        kind: "bare",
+        payload: responseBytes
+      };
+    }
+
+    throw new Error("missing Apple WLoc response prefix");
+  }
+
+  // Heuristic: a valid AppleWLoc payload starts with a protobuf tag whose wire type
+  // is 0 or 2 and field number is > 0. Field 2 (wifi) tag is 0x12.
+  function looksLikeAppleWLocPayload(bytes) {
+    if (!bytes || bytes.length === 0) {
+      return false;
+    }
+    var tag = bytes[0];
+    var fieldNumber = tag >> 3;
+    var wireType = tag & 0x7;
+    return fieldNumber > 0 && (wireType === 0 || wireType === 2);
+  }
+
+  function spoofArpcRequest(requestBytes, configInput) {
+    var config = normalizeConfig(configInput);
+    var arpc = parseArpc(requestBytes);
+    var patched = patchAppleWLocPayload(arpc.payload, config);
+    return {
+      response: buildAppleWLocResponse(patched.payload),
+      payload: patched.payload,
+      wifiCount: patched.wifiCount,
+      cellCount: patched.cellCount,
+      arpc: arpc
+    };
+  }
+
+  function spoofAppleResponse(responseBytes, configInput) {
+    var config = normalizeConfig(configInput);
+    var extraction = extractAppleWLocPayload(responseBytes);
+    var patched = patchAppleWLocPayload(extraction.payload, config);
+    var response;
+
+    if (extraction.kind === "arpc") {
+      // Write back in ARPC format, preserving the original envelope metadata.
+      var arpcOut = {
+        version: extraction.arpc.version,
+        locale: extraction.arpc.locale,
+        appIdentifier: extraction.arpc.appIdentifier,
+        osVersion: extraction.arpc.osVersion,
+        functionId: extraction.arpc.functionId,
+        payload: patched.payload
+      };
+      response = serializeArpc(arpcOut);
+    } else if (extraction.kind === "marker") {
+      // Rebuild: original prefix + marker bytes + new uint16 len + patched payload + suffix.
+      var newLenBytes = writeUInt16BE(patched.payload.length);
+      response = concatBytes([
+        extraction.prefix,
+        extraction.markerAndLen.slice(0, APPLE_WLOC_MARKER.length),
+        newLenBytes,
+        patched.payload,
+        extraction.suffix
+      ]);
+    } else {
+      // synthetic / bare – use the simple prefix format.
+      response = buildAppleWLocResponse(patched.payload, extraction.prefix);
+    }
+
+    return {
+      response: response,
+      payload: patched.payload,
+      wifiCount: patched.wifiCount,
+      cellCount: patched.cellCount,
+      kind: extraction.kind,
+      prefix: extraction.prefix ? hexPreview(extraction.prefix, 8) : ""
+    };
+  }
+
+  function parseArgumentString(argument) {
+    var result = {};
+    if (!argument || typeof argument !== "string") {
+      return result;
+    }
+
+    var tailKeys = [
+      "debug",
+      "mode",
+      "enabled",
+      "latitude",
+      "longitude",
+      "altitude",
+      "address",
+      "configHost",
+      "configToken",
+      "horizontalAccuracy",
+      "verticalAccuracy",
+      "unknownValue4",
+      "motionActivityType",
+      "motionActivityConfidence",
+      "failOpen",
+      "dumpRaw",
+      "dumpHeaders",
+      "prepareHeaders",
+      "rawLimit"
+    ];
+    var configUrlKey = "configUrl=";
+    var configUrlIdx = argument.indexOf(configUrlKey);
+    if (configUrlIdx >= 0) {
+      var valueStart = configUrlIdx + configUrlKey.length;
+      var tail = argument.slice(valueStart);
+      var end = -1;
+      var i;
+      for (i = 0; i < tailKeys.length; i += 1) {
+        var marker = "&" + tailKeys[i] + "=";
+        var pos = tail.indexOf(marker);
+        if (pos >= 0 && (end < 0 || pos < end)) {
+          end = pos;
+        }
+      }
+      var configUrlValue = end >= 0 ? tail.slice(0, end) : tail;
+      try {
+        result.configUrl = decodeURIComponent(configUrlValue);
+      } catch (err) {
+        result.configUrl = configUrlValue;
+      }
+      argument = argument.slice(0, configUrlIdx) + (end >= 0 ? tail.slice(end + 1) : "");
+    }
+
+    var pairs = argument.split(/[&;]/);
+    for (var j = 0; j < pairs.length; j += 1) {
+      var part = pairs[j];
+      if (!part) {
+        continue;
+      }
+      var eq = part.indexOf("=");
+      var key = eq >= 0 ? part.slice(0, eq) : part;
+      var value = eq >= 0 ? part.slice(eq + 1) : "true";
+      try {
+        result[decodeURIComponent(key)] = decodeURIComponent(value);
+      } catch (err2) {
+        result[key] = value;
+      }
+    }
+    return result;
+  }
+
+  function resolveConfigUrl(args) {
+    args = args || {};
+    var direct = String(args.configUrl || args.cfg || args.url || "").trim();
+    if (direct) {
+      return direct;
+    }
+    var host = String(args.configHost || "").trim().replace(/\/+$/, "");
+    var token = String(args.configToken || "").trim();
+    if (host && token) {
+      return host + "/loc.json?token=" + encodeURIComponent(token);
+    }
+    return "";
+  }
+
+  function isPlaceholderValue(value) {
+    return typeof value === "string" && /^\{[^}]+\}$/.test(value.trim());
+  }
+
+
+  var WLOC_DEBUG_KEY = "wloc_debug";
+
+  function resetWlocDebug(update) {
+    if (typeof $persistentStore === "undefined" || !$persistentStore.write) {
+      return;
+    }
+    try {
+      var current = {};
+      for (var key in update) {
+        if (Object.prototype.hasOwnProperty.call(update, key)) {
+          current[key] = update[key];
+        }
+      }
+      current.updatedAt = new Date().toISOString();
+      $persistentStore.write(JSON.stringify(current), WLOC_DEBUG_KEY);
+    } catch (err) {
+      console.log("WLOC debug reset failed: " + err.message);
+    }
+  }
+
+  function writeWlocDebug(update) {
+    if (typeof $persistentStore === "undefined" || !$persistentStore.write) {
+      return;
+    }
+    try {
+      var current = {};
+      if ($persistentStore.read) {
+        var raw = $persistentStore.read(WLOC_DEBUG_KEY);
+        if (raw) {
+          current = typeof raw === "string" ? JSON.parse(raw) : raw;
+        }
+      }
+      if (!current || typeof current !== "object") {
+        current = {};
+      }
+      for (var key in update) {
+        if (Object.prototype.hasOwnProperty.call(update, key)) {
+          current[key] = update[key];
+        }
+      }
+      current.updatedAt = new Date().toISOString();
+      $persistentStore.write(JSON.stringify(current), WLOC_DEBUG_KEY);
+    } catch (err) {
+      console.log("WLOC debug write failed: " + err.message);
+    }
+  }
+
+  function readPluginStoreArg(name) {
+    if (typeof $persistentStore === "undefined" || !$persistentStore.read) {
+      return null;
+    }
+    try {
+      var value = $persistentStore.read(name);
+      if (value == null || value === "") {
+        return null;
+      }
+      return String(value);
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function enrichArgsFromLegacyWlocStore(args) {
+    args = args || {};
+    if (typeof $persistentStore === "undefined" || !$persistentStore.read) {
+      return args;
+    }
+    try {
+      var raw = $persistentStore.read("wloc_settings");
+      if (!raw) {
+        return args;
+      }
+      var saved = typeof raw === "string" ? JSON.parse(raw) : raw;
+      if (!saved || typeof saved !== "object") {
+        return args;
+      }
+      if (saved.latitude != null) {
+        args.latitude = String(saved.latitude);
+      }
+      if (saved.longitude != null) {
+        args.longitude = String(saved.longitude);
+      }
+      if (saved.accuracy != null) {
+        args.horizontalAccuracy = String(saved.accuracy);
+        args.verticalAccuracy = String(saved.accuracy);
+      }
+      if (saved.latitude != null && saved.longitude != null) {
+        args.enabled = "true";
+      }
+      return args;
+    } catch (err) {
+      console.log("WLOC legacy settings read failed: " + err.message);
+      return args;
+    }
+  }
+
+  function enrichArgsFromPluginStore(args) {
+    args = enrichArgsFromLegacyWlocStore(args);
+    var keys = [
+      "enabled",
+      "latitude",
+      "longitude",
+      "altitude",
+      "horizontalAccuracy",
+      "verticalAccuracy",
+      "address",
+      "configHost",
+      "configToken",
+      "configUrl",
+      "debug"
+    ];
+    var i;
+    args = args || {};
+    for (i = 0; i < keys.length; i += 1) {
+      var key = keys[i];
+      var current = args[key];
+      if (current == null || current === "" || isPlaceholderValue(current)) {
+        var stored = readPluginStoreArg(key);
+        if (stored != null && !isPlaceholderValue(stored)) {
+          args[key] = stored;
+        }
+      }
+    }
+    return args;
+  }
+
+  function readScriptArguments() {
+    var out = {};
+    if (typeof $argument !== "undefined" && $argument != null) {
+      if (typeof $argument === "string") {
+        out = parseArgumentString($argument);
+      } else if (typeof $argument === "object") {
+        var key;
+        for (key in $argument) {
+          if (Object.prototype.hasOwnProperty.call($argument, key)) {
+            var value = $argument[key];
+            out[key] = value == null ? "" : String(value);
+          }
+        }
+      } else {
+        out = parseArgumentString(String($argument));
+      }
+    }
+    return enrichArgsFromPluginStore(out);
+  }
+
+  function logScriptArguments(debug) {
+    if (!debug) {
+      return;
+    }
+    var args = readScriptArguments();
+    var raw =
+      typeof $argument === "undefined" || $argument == null
+        ? "<none>"
+        : typeof $argument === "object"
+          ? JSON.stringify($argument)
+          : String($argument);
+    console.log("Location spoofer $argument raw: " + raw);
+    console.log(
+      "Location spoofer args parsed: lat=" +
+        args.latitude +
+        ", lng=" +
+        args.longitude +
+        ", configUrl=" +
+        (resolveConfigUrl(args) || "<none>")
+    );
+  }
+
+  function detectRuntime() {
+    if (typeof $environment !== "undefined" && $environment && $environment.product) {
+      return String($environment.product);
+    }
+    if (typeof $loon !== "undefined") {
+      return "Loon";
+    }
+    return "Unknown";
+  }
+
+  function isLoonRuntime() {
+    return detectRuntime() === "Loon";
+  }
+
+  function isGzipBytes(bytes) {
+    return bytes && bytes.length >= 2 && bytes[0] === 0x1f && bytes[1] === 0x8b;
+  }
+
+  function readGeocodeCache() {
+    if (typeof $persistentStore === "undefined" || !$persistentStore.read) {
+      return null;
+    }
+    try {
+      var raw = $persistentStore.read("location_spoofer_geocode");
+      return raw ? JSON.parse(raw) : null;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function writeGeocodeCache(entry) {
+    if (typeof $persistentStore === "undefined" || !$persistentStore.write) {
+      return;
+    }
+    try {
+      $persistentStore.write("location_spoofer_geocode", JSON.stringify(entry));
+    } catch (err) {
+      // ignore cache write failures
+    }
+  }
+
+  function fetchElevation(lat, lng, callback) {
+    if (typeof $httpClient === "undefined" || !$httpClient.get) {
+      callback(null);
+      return;
+    }
+    var url =
+      "https://api.open-meteo.com/v1/elevation?latitude=" +
+      encodeURIComponent(String(lat)) +
+      "&longitude=" +
+      encodeURIComponent(String(lng));
+    $httpClient.get({ url: url, timeout: 4000 }, function (error, response, body) {
+      if (error || !body) {
+        callback(null);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        if (data && data.elevation && data.elevation.length) {
+          callback(Math.round(Number(data.elevation[0])));
+          return;
+        }
+      } catch (err) {
+        // ignore parse failures
+      }
+      callback(null);
+    });
+  }
+
+  function geocodeAddress(address, debug, callback) {
+    var query = String(address || "").trim();
+    if (!query) {
+      callback(null);
+      return;
+    }
+
+    var cached = readGeocodeCache();
+    if (cached && cached.address === query && Number.isFinite(Number(cached.latitude)) && Number.isFinite(Number(cached.longitude))) {
+      if (debug) {
+        console.log("Location spoofer geocode cache hit: " + query + " -> " + cached.latitude + "," + cached.longitude);
+      }
+      callback(cached);
+      return;
+    }
+
+    if (typeof $httpClient === "undefined" || !$httpClient.get) {
+      if (debug) {
+        console.log("Location spoofer geocode skipped: $httpClient unavailable");
+      }
+      callback(null);
+      return;
+    }
+
+    var url =
+      "https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=0&q=" +
+      encodeURIComponent(query);
+    $httpClient.get(
+      {
+        url: url,
+        timeout: 8000,
+        headers: { "User-Agent": "ios-location-spoofer/1.0 (Loon plugin)" }
+      },
+      function (error, response, body) {
+        if (error || !body) {
+          if (debug) {
+            console.log("Location spoofer geocode failed: " + (error || "empty body"));
+          }
+          callback(null);
+          return;
+        }
+        try {
+          var results = JSON.parse(body);
+          if (!results || !results.length) {
+            if (debug) {
+              console.log("Location spoofer geocode no result for: " + query);
+            }
+            callback(null);
+            return;
+          }
+          var hit = results[0];
+          var lat = Number(hit.lat);
+          var lng = Number(hit.lon);
+          if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+            callback(null);
+            return;
+          }
+          var entry = {
+            address: query,
+            latitude: lat,
+            longitude: lng,
+            displayName: hit.display_name || query
+          };
+          fetchElevation(lat, lng, function (altitude) {
+            if (altitude != null) {
+              entry.altitude = altitude;
+            }
+            writeGeocodeCache(entry);
+            if (debug) {
+              console.log(
+                "Location spoofer geocode resolved: " +
+                  query +
+                  " -> " +
+                  lat +
+                  "," +
+                  lng +
+                  (altitude != null ? ", alt=" + altitude : "")
+              );
+            }
+            callback(entry);
+          });
+        } catch (err) {
+          if (debug) {
+            console.log("Location spoofer geocode parse failed: " + err.message);
+          }
+          callback(null);
+        }
+      }
+    );
+  }
+
+  function mergeConfig(base, extra) {
+    var out = {};
+    var key;
+    for (key in base) {
+      if (Object.prototype.hasOwnProperty.call(base, key)) {
+        out[key] = base[key];
+      }
+    }
+    extra = extra || {};
+    for (key in extra) {
+      if (Object.prototype.hasOwnProperty.call(extra, key)) {
+        out[key] = extra[key];
+      }
+    }
+    return out;
+  }
+
+  function decodeBase64(value) {
+    if (typeof atob === "function") {
+      return atob(value);
+    }
+    if (typeof Buffer !== "undefined") {
+      return Buffer.from(value, "base64").toString("utf8");
+    }
+    throw new Error("base64 decoder unavailable");
+  }
+
+  function configFromArgs(args) {
+    var cfg = {};
+    var scalarKeys = [
+      "enabled",
+      "mode",
+      "latitude",
+      "longitude",
+      "address",
+      "horizontalAccuracy",
+      "verticalAccuracy",
+      "altitude",
+      "unknownValue4",
+      "motionActivityType",
+      "motionActivityConfidence",
+      "failOpen",
+      "debug",
+      "dumpRaw",
+      "dumpHeaders",
+      "prepareHeaders",
+      "rawLimit"
+    ];
+
+    if (args.config) {
+      cfg = mergeConfig(cfg, JSON.parse(args.config));
+    }
+    if (args.configBase64) {
+      cfg = mergeConfig(cfg, JSON.parse(decodeBase64(args.configBase64)));
+    }
+    for (var i = 0; i < scalarKeys.length; i += 1) {
+      var key = scalarKeys[i];
+      if (Object.prototype.hasOwnProperty.call(args, key)) {
+        cfg[key] = args[key];
+      }
+    }
+    return cfg;
+  }
+
+  function readRemoteConfigCache(url) {
+    if (!url || typeof $persistentStore === "undefined" || !$persistentStore.read) {
+      return null;
+    }
+    try {
+      var raw = $persistentStore.read("location_spoofer_remote_cfg");
+      if (!raw) {
+        return null;
+      }
+      var entry = JSON.parse(raw);
+      if (!entry || entry.url !== url || !entry.data) {
+        return null;
+      }
+      if (Date.now() - entry.ts > 300000) {
+        return null;
+      }
+      return entry.data;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function writeRemoteConfigCache(url, data) {
+    if (!url || typeof $persistentStore === "undefined" || !$persistentStore.write) {
+      return;
+    }
+    try {
+      $persistentStore.write(
+        "location_spoofer_remote_cfg",
+        JSON.stringify({ url: url, data: data, ts: Date.now() })
+      );
+    } catch (err) {
+      // ignore cache write failures
+    }
+  }
+
+  function fetchRemoteConfig(url, timeout, debug, callback) {
+    if (!url || typeof $httpClient === "undefined" || !$httpClient.get) {
+      callback(null, "http client unavailable");
+      return;
+    }
+    $httpClient.get({ url: url, timeout: timeout || 3000 }, function (error, response, body) {
+      if (error || !body) {
+        callback(null, error || "empty body");
+        return;
+      }
+      try {
+        callback(JSON.parse(body), null);
+      } catch (err) {
+        callback(null, err.message);
+      }
+    });
+  }
+
+  function refreshRemoteConfigCache(url, debug) {
+    fetchRemoteConfig(url, 5000, debug, function (data, err) {
+      if (data) {
+        writeRemoteConfigCache(url, data);
+        return;
+      }
+      if (debug) {
+        console.log("Location spoofer remote config refresh failed: " + err);
+      }
+    });
+  }
+
+  function applyAddressFromCache(cfg, address, debug) {
+    if (!address) {
+      return;
+    }
+    var cached = readGeocodeCache();
+    if (cached && cached.address === address && Number.isFinite(Number(cached.latitude)) && Number.isFinite(Number(cached.longitude))) {
+      cfg.latitude = cached.latitude;
+      cfg.longitude = cached.longitude;
+      if (cached.altitude != null) {
+        cfg.altitude = cached.altitude;
+      }
+      if (debug) {
+        console.log("Location spoofer geocode cache hit: " + address);
+      }
+      return;
+    }
+    if (debug) {
+      console.log("Location spoofer geocode cache miss: " + address + " (use manual lat/lng until cron refreshes)");
+    }
+  }
+
+  function loadRuntimeConfigSync() {
+    var args = readScriptArguments();
+    var cfg = mergeConfig(DEFAULT_CONFIG, configFromArgs(args));
+    var configUrl = resolveConfigUrl(args);
+    var debug = parseBoolean(cfg.debug, false);
+    var address = String(args.address || "").trim();
+
+    applyAddressFromCache(cfg, address, debug);
+
+    if (configUrl) {
+      var remoteCfg = readRemoteConfigCache(configUrl);
+      if (remoteCfg) {
+        cfg = mergeConfig(cfg, remoteCfg);
+        if (debug) {
+          console.log(
+            "Location spoofer remote config cache hit -> " +
+              remoteCfg.latitude +
+              "," +
+              remoteCfg.longitude
+          );
+        }
+      }
+    }
+
+    return { cfg: cfg, configUrl: configUrl, debug: debug };
+  }
+
+  function loadRuntimeConfig(callback) {
+    var loaded = loadRuntimeConfigSync();
+    var cfg = loaded.cfg;
+    var configUrl = loaded.configUrl;
+    var debug = loaded.debug;
+
+    function finish() {
+      try {
+        callback(normalizeConfig(cfg));
+      } catch (err) {
+        if (debug) {
+          console.log("Location spoofer config invalid: " + err.message + " | cfg lat/lng=" + cfg.latitude + "," + cfg.longitude);
+        }
+        if (!Number.isFinite(Number(cfg.latitude)) || !Number.isFinite(Number(cfg.longitude))) {
+          cfg.latitude = DEFAULT_CONFIG.latitude;
+          cfg.longitude = DEFAULT_CONFIG.longitude;
+        }
+        callback(normalizeConfig(cfg));
+      }
+    }
+
+    logScriptArguments(debug);
+
+    if (!configUrl) {
+      finish();
+      return;
+    }
+
+    if (readRemoteConfigCache(configUrl)) {
+      refreshRemoteConfigCache(configUrl, debug);
+      finish();
+      return;
+    }
+
+    if (debug) {
+      console.log("Location spoofer remote config fetching: " + configUrl);
+    }
+    fetchRemoteConfig(configUrl, 3000, debug, function (data, err) {
+      if (data) {
+        writeRemoteConfigCache(configUrl, data);
+        cfg = mergeConfig(cfg, data);
+        if (debug) {
+          console.log(
+            "Location spoofer remote config loaded -> " + data.latitude + "," + data.longitude
+          );
+        }
+      } else if (debug) {
+        console.log("Location spoofer remote config fetch failed: " + err + " (using manual lat/lng)");
+      }
+      finish();
+    });
+  }
+
+  function runMaintenanceCron() {
+    var args = readScriptArguments();
+    var debug = parseBoolean(args.debug, false);
+    var pending = 0;
+
+    function maybeDone() {
+      pending -= 1;
+      if (pending <= 0) {
+        $done({});
+      }
+    }
+
+    var configUrl = resolveConfigUrl(args);
+    if (configUrl) {
+      pending += 1;
+      fetchRemoteConfig(configUrl, 8000, debug, function (data, err) {
+        if (data) {
+          writeRemoteConfigCache(configUrl, data);
+          if (debug) {
+            console.log(
+              "Location spoofer config cron cached -> " + data.latitude + "," + data.longitude
+            );
+          }
+        } else if (debug) {
+          console.log("Location spoofer config cron failed: " + err);
+        }
+        maybeDone();
+      });
+    }
+
+    var address = String(args.address || "").trim();
+    if (address) {
+      pending += 1;
+      geocodeAddress(address, debug, function () {
+        maybeDone();
+      });
+    }
+
+    if (pending === 0) {
+      $done({});
+    }
+  }
+
+  function runGeocodeCron() {
+    runMaintenanceCron();
+  }
+
+  function headersWithBinaryBody(sourceHeaders, length) {
+    var headers = {};
+    var key;
+    sourceHeaders = sourceHeaders || {};
+    for (key in sourceHeaders) {
+      if (Object.prototype.hasOwnProperty.call(sourceHeaders, key)) {
+        var lower = key.toLowerCase();
+        if (lower !== "content-length" && lower !== "content-encoding" && lower !== "transfer-encoding") {
+          headers[key] = sourceHeaders[key];
+        }
+      }
+    }
+    headers["Content-Type"] = "application/octet-stream";
+    headers["Content-Length"] = String(length);
+    return headers;
+  }
+
+  function setHeader(headers, name, value) {
+    headers = headers || {};
+    var lower = name.toLowerCase();
+    var existingKey = null;
+    for (var key in headers) {
+      if (Object.prototype.hasOwnProperty.call(headers, key) && key.toLowerCase() === lower) {
+        existingKey = key;
+        break;
+      }
+    }
+    headers[existingKey || name] = value;
+    return headers;
+  }
+
+  function prepareRequestHeaders(headers) {
+    return setHeader(headers || {}, "Accept-Encoding", "identity");
+  }
+
+  function donePreparedRequestPassThrough() {
+    var headers = prepareRequestHeaders((typeof $request !== "undefined" && $request.headers) || {});
+    $done({
+      headers: headers
+    });
+  }
+
+  // Decode an HTTP response body that may be gzip/deflate/br encoded.
+  // Shadowrocket/Surge expose $utils.ungzip; Loon falls back to DecompressionStream.
+  function decompressBody(body, contentEncoding) {
+    if (body == null) {
+      return body;
+    }
+    var enc = contentEncoding ? String(contentEncoding).toLowerCase() : "";
+    if (enc === "identity" || enc === "") {
+      return body;
+    }
+    try {
+      if (enc.indexOf("gzip") >= 0 && typeof $utils !== "undefined" && $utils.ungzip) {
+        return $utils.ungzip(body);
+      }
+      if (enc.indexOf("deflate") >= 0 && typeof $utils !== "undefined" && $utils.inflate) {
+        return $utils.inflate(body);
+      }
+      if (enc.indexOf("br") >= 0 && typeof $utils !== "undefined" && $utils.brotliDecompress) {
+        return $utils.brotliDecompress(body);
+      }
+    } catch (err) {
+      if (typeof console !== "undefined") {
+        console.log("Location spoofer decompress failed (" + enc + "): " + err.message);
+      }
+    }
+    return body;
+  }
+
+  function prepareResponseBodySync(config) {
+    var respHeaders = ($response && $response.headers) || {};
+    var contentEncoding = headerValue(respHeaders, "Content-Encoding");
+    var rawRespBody = $response && ($response.body != null ? $response.body : $response.bodyBytes);
+    logHttpDump("response-wire-original", $response, config);
+    logRawDump("response-wire-original", bodyToBytes(rawRespBody), config);
+
+    var bytes = bodyToBytes(rawRespBody);
+    if (!bytes || bytes.length < 2) {
+      return;
+    }
+
+    if (isGzipBytes(bytes) || (contentEncoding && String(contentEncoding).toLowerCase().indexOf("gzip") >= 0)) {
+      var decoded = bodyToBytes(decompressBody(rawRespBody, contentEncoding || "gzip"));
+      if (decoded && decoded.length > 2 && !isGzipBytes(decoded)) {
+        $response.body = decoded;
+        if (config.debug) {
+          console.log("Location spoofer decompressed body: " + bytes.length + " -> " + decoded.length + " bytes");
+        }
+        return;
+      }
+      if (config.debug) {
+        console.log(
+          "Location spoofer gzip body still compressed (len=" +
+            bytes.length +
+            "); ensure http-request prepare script is enabled"
+        );
+      }
+      return;
+    }
+
+    if (contentEncoding) {
+      var plain = bodyToBytes(decompressBody(rawRespBody, contentEncoding));
+      if (plain) {
+        $response.body = plain;
+      }
+    }
+  }
+
+  function headerValue(headers, name) {
+    if (!headers) {
+      return undefined;
+    }
+    var lower = name.toLowerCase();
+    for (var key in headers) {
+      if (Object.prototype.hasOwnProperty.call(headers, key) && key.toLowerCase() === lower) {
+        return headers[key];
+      }
+    }
+    return undefined;
+  }
+
+  function donePassThrough() {
+    $done({});
+  }
+
+  function valueType(value) {
+    if (value == null) {
+      return String(value);
+    }
+    if (value instanceof Uint8Array) {
+      return "Uint8Array";
+    }
+    if (typeof ArrayBuffer !== "undefined" && value instanceof ArrayBuffer) {
+      return "ArrayBuffer";
+    }
+    return typeof value;
+  }
+
+  function valueLength(value) {
+    if (value == null) {
+      return 0;
+    }
+    if (typeof value === "string" || typeof value.length === "number") {
+      return value.length;
+    }
+    if (typeof ArrayBuffer !== "undefined" && value instanceof ArrayBuffer) {
+      return value.byteLength;
+    }
+    return 0;
+  }
+
+  function objectKeys(value) {
+    if (!value || typeof value !== "object") {
+      return "";
+    }
+    var keys = [];
+    for (var key in value) {
+      if (Object.prototype.hasOwnProperty.call(value, key)) {
+        keys.push(key);
+      }
+    }
+    return keys.join(",");
+  }
+
+  function fieldHistogram(fields) {
+    var counts = {};
+    var order = [];
+    for (var i = 0; i < fields.length; i += 1) {
+      var key = String(fields[i].fieldNumber) + "/" + String(fields[i].wireType);
+      if (!counts[key]) {
+        counts[key] = 0;
+        order.push(key);
+      }
+      counts[key] += 1;
+    }
+    var parts = [];
+    for (var j = 0; j < order.length; j += 1) {
+      parts.push(order[j] + "x" + counts[order[j]]);
+    }
+    return parts.join(",");
+  }
+
+  function countFields(fields, fieldNumber) {
+    var count = 0;
+    for (var i = 0; i < fields.length; i += 1) {
+      if (fields[i].fieldNumber === fieldNumber) {
+        count += 1;
+      }
+    }
+    return count;
+  }
+
+  function countCellResponseFields(fields) {
+    var count = 0;
+    for (var i = 0; i < fields.length; i += 1) {
+      if (isCellResponseField(fields[i].fieldNumber)) {
+        count += 1;
+      }
+    }
+    return count;
+  }
+
+  function appleWLocPayloadInspect(payload) {
+    try {
+      var fields = parseFields(payload);
+      var parts = [
+        "payloadLen=" + payload.length,
+        "fields=" + fieldHistogram(fields),
+        "wifi=" + countFields(fields, 2),
+        "cellResp=" + countCellResponseFields(fields),
+        "cellReq=" + countFields(fields, 25),
+        "hasCounts=" + (countFields(fields, 3) + "/" + countFields(fields, 4)),
+        "deviceType=" + countFields(fields, 33),
+        patchedPayloadSummary(payload)
+      ];
+      return parts.join(", ");
+    } catch (err) {
+      return "payload parse failed: " + err.message;
+    }
+  }
+
+  function logRawDump(label, bytes, config) {
+    if (!config.dumpRaw || !bytes) {
+      return;
+    }
+    var limit = config.rawLimit || 0;
+    var emitted = limit > 0 && bytes.length > limit ? bytes.slice(0, limit) : bytes;
+    var encoded = bytesToBase64(emitted);
+    var chunkSize = 3000;
+    var chunks = Math.max(1, Math.ceil(encoded.length / chunkSize));
+    console.log("Location spoofer raw " + label + " base64 begin: len=" + bytes.length + ", emitted=" + emitted.length + ", chunks=" + chunks + ", truncated=" + (emitted.length !== bytes.length));
+    for (var i = 0; i < encoded.length; i += chunkSize) {
+      var chunkIndex = Math.floor(i / chunkSize) + 1;
+      console.log("Location spoofer raw " + label + " base64 chunk " + chunkIndex + "/" + chunks + ": " + encoded.slice(i, i + chunkSize));
+    }
+    console.log("Location spoofer raw " + label + " base64 end");
+  }
+
+  function jsonString(value) {
+    try {
+      return JSON.stringify(value || {});
+    } catch (err) {
+      return "<json-failed:" + err.message + ">";
+    }
+  }
+
+  function logHttpDump(label, message, config) {
+    if (!config.dumpHeaders && !config.dumpRaw) {
+      return;
+    }
+    message = message || {};
+    var request = typeof $request !== "undefined" ? $request : {};
+    var method = message.method || request.method || "<none>";
+    var url = message.url || request.url || "<none>";
+    var status = message.status || message.statusCode || "<none>";
+    console.log("Location spoofer raw " + label + " meta: method=" + method + ", url=" + url + ", status=" + status);
+    if (config.dumpHeaders) {
+      console.log("Location spoofer raw " + label + " headers: " + jsonString(message.headers || {}));
+    }
+  }
+
+  function compareResponsePayloads(responseBytes, patchedPayload) {
+    var result = {
+      originalPayloadLength: null,
+      patchedPayloadLength: patchedPayload ? patchedPayload.length : 0,
+      originalPayloadFields: null,
+      patchedPayloadFields: null,
+      originalPayloadSummary: null,
+      patchedPayloadSummary: null,
+      comparisonError: null
+    };
+
+    try {
+      var extraction = extractAppleWLocPayload(responseBytes);
+      var originalFields = parseFields(extraction.payload);
+      var patchedFields = parseFields(patchedPayload);
+      result.originalPayloadLength = extraction.payload.length;
+      result.originalPayloadFields = fieldHistogram(originalFields);
+      result.patchedPayloadFields = fieldHistogram(patchedFields);
+      result.originalPayloadSummary = appleWLocPayloadInspect(extraction.payload);
+      result.patchedPayloadSummary = appleWLocPayloadInspect(patchedPayload);
+    } catch (err) {
+      result.comparisonError = err && err.message ? err.message : String(err);
+    }
+
+    return result;
+  }
+
+  function inspectResponseBytes(bytes, config) {
+    if (!bytes) {
+      console.log("Location spoofer inspect response body unavailable");
+      return;
+    }
+    console.log("Location spoofer inspect response body: len=" + bytes.length + ", head=" + hexPreview(bytes, 48));
+    logRawDump("response", bytes, config);
+    try {
+      var extraction = extractAppleWLocPayload(bytes);
+      console.log("Location spoofer inspect response extraction: kind=" + extraction.kind + ", prefix=" + (extraction.prefix ? hexPreview(extraction.prefix, 8) : "<none>") + ", payloadLen=" + extraction.payload.length + ", suffixLen=" + (extraction.suffix ? extraction.suffix.length : 0));
+      console.log("Location spoofer inspect response payload: " + appleWLocPayloadInspect(extraction.payload));
+    } catch (err) {
+      console.log("Location spoofer inspect response extraction failed: " + err.message);
+      var directFields = tryParseFields(bytes);
+      if (directFields) {
+        console.log("Location spoofer inspect response direct fields: " + fieldHistogram(directFields));
+      }
+    }
+  }
+
+  function inspectRequestBytes(bytes, config) {
+    if (!bytes) {
+      console.log("Location spoofer inspect request body unavailable");
+      return;
+    }
+    console.log("Location spoofer inspect request body: len=" + bytes.length + ", head=" + hexPreview(bytes, 48));
+    logRawDump("request", bytes, config);
+    try {
+      var arpc = parseArpc(bytes);
+      console.log("Location spoofer inspect request arpc: version=" + arpc.version + ", functionId=" + arpc.functionId + ", locale=" + arpc.locale + ", app=" + arpc.appIdentifier + ", os=" + arpc.osVersion + ", payloadLen=" + arpc.payload.length);
+      console.log("Location spoofer inspect request payload: " + appleWLocPayloadInspect(arpc.payload));
+    } catch (err) {
+      console.log("Location spoofer inspect request arpc failed: " + err.message);
+      var directFields = tryParseFields(bytes);
+      if (directFields) {
+        console.log("Location spoofer inspect request direct fields: " + fieldHistogram(directFields));
+      }
+    }
+  }
+
+  function doneInspect(config, hasResponse) {
+    if (hasResponse) {
+      logHttpDump("response", $response, config);
+      inspectResponseBytes(messageBodyToBytes($response), config);
+    } else {
+      logHttpDump("request", $request, config);
+      inspectRequestBytes(messageBodyToBytes($request), config);
+      if (config.prepareHeaders) {
+        donePreparedRequestPassThrough();
+        return;
+      }
+    }
+    donePassThrough();
+  }
+
+  function doneResponseProbe(config) {
+    var response = typeof $response !== "undefined" ? $response : {};
+    var headers = response.headers || {};
+    if (config.debug) {
+      console.log("Location spoofer probe response keys: " + objectKeys(response));
+      console.log("Location spoofer probe headers: status=" + (response.status || response.statusCode || "<none>") + ", content-length=" + (headerValue(headers, "Content-Length") || "<none>") + ", content-type=" + (headerValue(headers, "Content-Type") || "<none>") + ", content-encoding=" + (headerValue(headers, "Content-Encoding") || "none"));
+      console.log("Location spoofer probe body slots: body=" + valueType(response.body) + "/" + valueLength(response.body) + ", bodyBytes=" + valueType(response.bodyBytes) + "/" + valueLength(response.bodyBytes) + ", rawBody=" + valueType(response.rawBody) + "/" + valueLength(response.rawBody) + ", binaryBody=" + valueType(response.binaryBody) + "/" + valueLength(response.binaryBody));
+      var bytes = messageBodyToBytes(response);
+      console.log("Location spoofer probe selected body: " + (bytes ? bytes.length : 0) + " bytes, head=" + (bytes ? hexPreview(bytes, 32) : "<none>"));
+    }
+    donePassThrough();
+  }
+
+  function doneSyntheticResponse(bytes, info) {
+    var headers = headersWithBinaryBody({}, bytes.length);
+    if (info && info.debug) {
+      headers["X-Location-Spoofer-Wifi-Count"] = String(info.wifiCount);
+      headers["X-Location-Spoofer-Cell-Count"] = String(info.cellCount || 0);
+    }
+    if (isLoonRuntime()) {
+      $done({
+        status: 200,
+        headers: headers,
+        body: bytes
+      });
+      return;
+    }
+    $done({
+      response: {
+        status: 200,
+        headers: headers,
+        body: bytes
+      }
+    });
+  }
+
+  function doneRewriteResponse(bytes, info) {
+    var sourceHeaders = typeof $response !== "undefined" ? $response.headers : {};
+    var headers = headersWithBinaryBody(sourceHeaders, bytes.length);
+    if (info && info.debug) {
+      headers["X-Location-Spoofer-Wifi-Count"] = String(info.wifiCount);
+      headers["X-Location-Spoofer-Cell-Count"] = String(info.cellCount || 0);
+    }
+    if (info && info.targetLat != null && info.targetLng != null) {
+      headers["X-Location-Spoofer-Target"] = String(info.targetLat) + "," + String(info.targetLng);
+    }
+    if (isLoonRuntime()) {
+      $done({
+        status: ($response && $response.status) || 200,
+        headers: headers,
+        body: bytes
+      });
+      return;
+    }
+    $done({
+      headers: headers,
+      body: bytes
+    });
+  }
+
+  function continueResponseRewrite(config) {
+    var responseBody = messageBodyToBytes($response);
+    if (!responseBody || responseBody.length < 2) {
+      if (config.debug) {
+        console.log(
+          "Location spoofer response body too short: " +
+            (responseBody ? responseBody.length : 0) +
+            " bytes, head=" +
+            (responseBody ? hexPreview(responseBody) : "<none>")
+        );
+      }
+      writeWlocDebug({
+        stage: "response-body-missing",
+        bodyLength: responseBody ? responseBody.length : 0,
+        completed: true
+      });
+      donePassThrough();
+      return;
+    }
+    writeWlocDebug({
+      stage: "response-body-received",
+      bodyLength: responseBody.length
+    });
+    if (config.debug) {
+      console.log("Location spoofer response body: " + responseBody.length + " bytes, head=" + hexPreview(responseBody, 32));
+      if (isLoonRuntime()) {
+        console.log("Location spoofer runtime: Loon");
+      }
+    }
+    logHttpDump("response-original", $response, config);
+    logRawDump("response-original", responseBody, config);
+    var responseResult = spoofAppleResponse(responseBody, config);
+    var payloadComparison = compareResponsePayloads(responseBody, responseResult.payload);
+    if (config.debug) {
+      console.log(
+        "Location spoofer patched " +
+          responseResult.wifiCount +
+          " wifi devices, " +
+          responseResult.cellCount +
+          " cell towers, kind=" +
+          responseResult.kind +
+          ", prefix=" +
+          (responseResult.prefix || "<none>") +
+          ", response=" +
+          responseResult.response.length +
+          " bytes"
+      );
+      console.log("Location spoofer patched locations: " + patchedPayloadSummary(responseResult.payload));
+      console.log(
+        "Location spoofer payload comparison: originalLen=" +
+          payloadComparison.originalPayloadLength +
+          ", patchedLen=" +
+          payloadComparison.patchedPayloadLength +
+          ", originalFields=" +
+          (payloadComparison.originalPayloadFields || "<unavailable>") +
+          ", patchedFields=" +
+          (payloadComparison.patchedPayloadFields || "<unavailable>") +
+          (payloadComparison.comparisonError
+            ? ", error=" + payloadComparison.comparisonError
+            : "")
+      );
+    }
+    logRawDump("response-patched", responseResult.response, config);
+    writeWlocDebug({
+      stage: "response-patched",
+      responseKind: responseResult.kind,
+      recordsFound: responseResult.wifiCount + responseResult.cellCount,
+      wifiPatched: responseResult.wifiCount,
+      cellPatched: responseResult.cellCount,
+      outputLength: responseResult.response.length,
+      originalPayloadLength: payloadComparison.originalPayloadLength,
+      patchedPayloadLength: payloadComparison.patchedPayloadLength,
+      originalPayloadFields: payloadComparison.originalPayloadFields,
+      patchedPayloadFields: payloadComparison.patchedPayloadFields,
+      originalPayloadSummary: payloadComparison.originalPayloadSummary,
+      patchedPayloadSummary: payloadComparison.patchedPayloadSummary,
+      comparisonError: payloadComparison.comparisonError,
+      completed: true
+    });
+    doneRewriteResponse(responseResult.response, {
+      wifiCount: responseResult.wifiCount,
+      cellCount: responseResult.cellCount,
+      debug: config.debug,
+      targetLat: config.latitude,
+      targetLng: config.longitude
+    });
+  }
+
+  function prepareResponseBody(config) {
+    prepareResponseBodySync(config);
+  }
+
+  function runShadowrocket() {
+    var hasRequest = typeof $request !== "undefined" && $request != null;
+    var hasResponse = typeof $response !== "undefined" && $response != null;
+
+    resetWlocDebug({
+      stage: "script-started",
+      mode: hasResponse ? "response" : (hasRequest ? "request" : "maintenance"),
+      url: hasRequest && $request.url ? $request.url : null,
+      completed: false,
+      error: null
+    });
+
+    if (!hasRequest && !hasResponse) {
+      runMaintenanceCron();
+      return;
+    }
+
+    if (hasRequest && !hasResponse) {
+      var prepArgs = readScriptArguments();
+      if (parseBoolean(prepArgs.debug, false)) {
+        console.log("Location spoofer prepare -> Accept-Encoding: identity");
+      }
+      donePreparedRequestPassThrough();
+      return;
+    }
+
+    loadRuntimeConfig(function (config) {
+      try {
+        writeWlocDebug({
+          stage: "settings-loaded",
+          settingsLoaded: true,
+          enabled: config.enabled,
+          latitude: config.latitude,
+          longitude: config.longitude,
+          horizontalAccuracy: config.horizontalAccuracy,
+          verticalAccuracy: config.verticalAccuracy,
+          configuredMode: config.mode
+        });
+        if (!config.enabled) {
+          writeWlocDebug({ stage: "disabled-pass-through", completed: true });
+          donePassThrough();
+          return;
+        }
+
+        if (config.mode === "inspect") {
+          doneInspect(config, hasResponse);
+          return;
+        }
+
+        if (hasResponse) {
+          if (config.debug) {
+            console.log(
+              "Location spoofer intercept -> lat=" +
+                config.latitude +
+                ", lng=" +
+                config.longitude +
+                ", url=" +
+                (($request && $request.url) || "<none>")
+            );
+          }
+          if (config.mode === "probe") {
+            doneResponseProbe(config);
+            return;
+          }
+          if (config.mode !== "response") {
+            donePassThrough();
+            return;
+          }
+          prepareResponseBody(config);
+          continueResponseRewrite(config);
+          return;
+        }
+
+        if (config.mode !== "request") {
+          donePassThrough();
+          return;
+        }
+        var requestBody = messageBodyToBytes($request);
+        if (config.debug) {
+          console.log("Location spoofer request mode body length: " + (requestBody ? requestBody.length : 0));
+        }
+        if (!requestBody) {
+          if (config.debug) {
+            console.log("Location spoofer request body unavailable");
+          }
+          writeWlocDebug({ stage: "request-body-missing", bodyLength: 0, completed: true });
+          donePassThrough();
+          return;
+        }
+        writeWlocDebug({ stage: "request-body-received", bodyLength: requestBody.length });
+        if (requestBody.length < 2) {
+          if (config.debug) {
+            console.log("Location spoofer request body too short: " + requestBody.length + " bytes, head=" + hexPreview(requestBody));
+          }
+          donePassThrough();
+          return;
+        }
+        logHttpDump("request-original", $request, config);
+        logRawDump("request-original", requestBody, config);
+        var requestResult = spoofArpcRequest(requestBody, config);
+        if (config.debug) {
+          console.log("Location spoofer request synthetic response: patched " + requestResult.wifiCount + " wifi devices, " + requestResult.cellCount + " cell towers, response=" + requestResult.response.length + " bytes");
+          console.log("Location spoofer patched locations: " + patchedPayloadSummary(requestResult.payload));
+        }
+        logRawDump("request-synthetic-response", requestResult.response, config);
+        writeWlocDebug({
+          stage: "request-synthetic-response",
+          recordsFound: requestResult.wifiCount + requestResult.cellCount,
+          wifiPatched: requestResult.wifiCount,
+          cellPatched: requestResult.cellCount,
+          outputLength: requestResult.response.length,
+          completed: true
+        });
+        doneSyntheticResponse(requestResult.response, {
+          wifiCount: requestResult.wifiCount,
+          cellCount: requestResult.cellCount,
+          debug: config.debug
+        });
+      } catch (err) {
+        writeWlocDebug({
+          stage: "failed",
+          completed: true,
+          error: err && err.message ? err.message : String(err)
+        });
+        if (config.debug) {
+          var diagBody = hasResponse ? messageBodyToBytes($response) : messageBodyToBytes($request);
+          console.log("Location spoofer failed: " + err.message + " | bodyLen=" + (diagBody ? diagBody.length : 0) + " head=" + (diagBody ? hexPreview(diagBody, 32) : "<none>"));
+        }
+        if (config.failOpen !== false) {
+          donePassThrough();
+          return;
+        }
+        $done({
+          response: {
+            status: "HTTP/1.1 500 Internal Server Error",
+            headers: { "Content-Type": "text/plain" },
+            body: "location spoofer failed: " + err.message
+          }
+        });
+      }
+    });
+  }
+
+  var api = {
+    DEFAULT_CONFIG: DEFAULT_CONFIG,
+    APPLE_WLOC_PREFIX: APPLE_WLOC_PREFIX,
+    APPLE_WLOC_MARKER: APPLE_WLOC_MARKER,
+    bodyToBytes: bodyToBytes,
+    messageBodyToBytes: messageBodyToBytes,
+    hexPreview: hexPreview,
+    bytesToBinaryString: bytesToBinaryString,
+    bytesToBase64: bytesToBase64,
+    binaryStringToBytes: binaryStringToBytes,
+    concatBytes: concatBytes,
+    readUInt16BE: readUInt16BE,
+    writeUInt16BE: writeUInt16BE,
+    encodeVarintUnsigned: encodeVarintUnsigned,
+    encodeVarintSignedInt64: encodeVarintSignedInt64,
+    decodeVarint: decodeVarint,
+    makeVarintField: makeVarintField,
+    makeLengthDelimitedField: makeLengthDelimitedField,
+    parseFields: parseFields,
+    tryParseFields: tryParseFields,
+    firstFieldByNumber: firstFieldByNumber,
+    locationSummary: locationSummary,
+    patchedPayloadSummary: patchedPayloadSummary,
+    coordToInt: coordToInt,
+    normalizeConfig: normalizeConfig,
+    patchLocation: patchLocation,
+    patchWifiDevice: patchWifiDevice,
+    patchCellTower: patchCellTower,
+    patchAppleWLocPayload: patchAppleWLocPayload,
+    parseArpc: parseArpc,
+    serializeArpc: serializeArpc,
+    buildAppleWLocResponse: buildAppleWLocResponse,
+    extractAppleWLocPayload: extractAppleWLocPayload,
+    spoofArpcRequest: spoofArpcRequest,
+    spoofAppleResponse: spoofAppleResponse,
+    parseArgumentString: parseArgumentString,
+    readScriptArguments: readScriptArguments,
+    geocodeAddress: geocodeAddress,
+    prepareRequestHeaders: prepareRequestHeaders
+  };
+
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = api;
+  } else {
+    runShadowrocket();
+  }
+}());
